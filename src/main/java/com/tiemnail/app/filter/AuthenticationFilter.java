@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-//@WebFilter("/*")
+@WebFilter("/*")
 public class AuthenticationFilter implements Filter {
 
     private ServletContext context;

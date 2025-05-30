@@ -1,6 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom">
+
+<%--
+    File này sẽ chứa phần <head> chung và navbar cho các trang khách hàng.
+    Quan trọng: Các trang JSP con sẽ KHÔNG cần thẻ <!DOCTYPE html>, <html>, <head> nữa.
+    Chúng sẽ bắt đầu trực tiếp với nội dung bên trong <body>.
+--%>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+  <%-- Title sẽ được set bởi trang JSP con, nhưng có thể có title mặc định ở đây --%>
+  <%-- <title>Tiệm Nail XYZ</title> --%>
+
+  <!-- Bootstrap CSS từ CDN -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Custom CSS của bạn -->
+  <link href="${pageContext.request.contextPath}/css/custom-style.css" rel="stylesheet">
+
+  <%-- Thẻ title sẽ được ghi đè bởi trang con nếu trang con cũng định nghĩa title --%>
+</head>
+<body> <%-- Mở thẻ body ở đây --%>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom"> <%-- Sử dụng class navbar-custom --%>
   <div class="container">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/">Tiệm Nail XYZ</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,9 +39,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item <c:if test="${pageContext.request.requestURI.endsWith('/') || pageContext.request.requestURI.endsWith('/index.jsp') || empty pageContext.request.servletPath}">active</c:if>">
+        <li class="nav-item <c:if test="${pageContext.request.requestURI.endsWith('/') || pageContext.request.requestURI.endsWith('/index.jsp') || empty pageContext.request.servletPath && !pageContext.request.requestURI.contains('/admin/')}">active</c:if>">
           <a class="nav-link" href="${pageContext.request.contextPath}/">Trang Chủ
-            <c:if test="${pageContext.request.requestURI.endsWith('/') || pageContext.request.requestURI.endsWith('/index.jsp') || empty pageContext.request.servletPath}"><span class="sr-only">(current)</span></c:if>
+            <c:if test="${pageContext.request.requestURI.endsWith('/') || pageContext.request.requestURI.endsWith('/index.jsp') || empty pageContext.request.servletPath && !pageContext.request.requestURI.contains('/admin/')}"><span class="sr-only">(current)</span></c:if>
           </a>
         </li>
         <li class="nav-item <c:if test="${pageContext.request.requestURI.contains('/services')}">active</c:if>">
@@ -57,3 +88,4 @@
   </div>
 </nav>
 <div style="padding-top: 70px;"></div>
+<%-- Thẻ <body> được mở ở đây và sẽ được đóng ở file JSP con (hoặc trong _footer_customer.jsp nếu bạn muốn) --%>

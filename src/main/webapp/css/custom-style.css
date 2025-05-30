@@ -1,37 +1,43 @@
+/* src/main/webapp/css/custom-style.css */
+
 @charset "UTF-8";
 
 :root {
-    --primary-pink: #FADADD; /* Hồng pastel rất nhạt cho nền, chi tiết */
-    --secondary-pink: #FFB6C1; /* Hồng pastel đậm hơn cho nút, điểm nhấn */
-    --accent-pink: #F8AFA6; /* Hồng cam đào làm điểm nhấn */
+    /* Tông màu Pastel - Đã điều chỉnh một chút cho độ tương phản */
+    --primary-pink: #FADADD;        /* Hồng pastel rất nhạt - Nền nhẹ, chi tiết phụ */
+    --secondary-pink: #F4ACB7;      /* Hồng pastel rõ hơn - Nút, điểm nhấn chính */
+    --accent-pink: #FF8FAB;         /* Hồng đậm hơn/sáng hơn - Điểm nhấn mạnh mẽ, link */
 
-    --primary-blue-soft: #D6EAF8; /* Xanh dương pastel rất nhạt */
-    --secondary-blue-accent: #A9CCE3; /* Xanh dương pastel vừa phải */
+    --primary-blue-soft: #D6EAF8;   /* Xanh dương pastel rất nhạt - Nền nhẹ, chi tiết phụ */
+    --secondary-blue-accent: #A5D8DD;/* Xanh dương pastel vừa phải - Điểm nhấn phụ, icon */
 
-    --gold-accent: #EADCA6; /* Vàng nhạt tinh tế */
-    --gold-deep: #D4AF37; /* Vàng đậm hơn cho chi tiết cao cấp */
+    --gold-accent: #F3D594;         /* Vàng nhạt mềm mại */
+    --gold-deep: #D4AF37;           /* Vàng đậm hơn (ít dùng, chỉ khi cần nổi bật) */
 
-    --text-dark: #333333;
-    --text-medium: #555555;
-    --text-light: #777777;
-    --text-on-dark-bg: #FDFEFE;
-    --text-on-pink-bg: #5D4037; /* Nâu đậm cho chữ trên nền hồng nhạt */
+    --text-darkest: #2c3e50;         /* Xám đen - Tiêu đề chính, chữ quan trọng */
+    --text-dark-gray: #4A4A4A;       /* Xám đậm - Chữ nội dung chính */
+    --text-medium-gray: #6c757d;     /* Xám vừa - Chữ phụ, mô tả ngắn */
+    --text-light-gray: #95a5a6;      /* Xám nhạt - Chú thích, placeholder */
+    --text-on-pink-bg: #783e50;      /* Nâu hồng đậm cho chữ trên nền hồng nhạt */
+    --text-on-blue-bg: #274c77;      /* Xanh đậm cho chữ trên nền xanh nhạt */
+    --text-on-dark-bg: #ecf0f1;      /* Trắng ngà cho chữ trên nền tối */
 
-    --background-light: #FCFBFB; /* Nền trắng kem siêu nhạt */
-    --background-soft-cream: #FDF6F0; /* Kem mềm mại */
+
+    --background-light: #FFFCFB;     /* Nền trắng kem siêu nhạt, ấm áp */
+    --background-soft-cream: #FFF9F5;/* Kem mềm mại cho các section */
     --white-pure: #FFFFFF;
-    --border-soft: #EAEAEA;
+    --border-soft: #E0E0E0;         /* Đường viền nhẹ nhàng hơn */
 
     --font-heading: 'Playfair Display', serif;
-    --font-body: 'Lato', sans-serif;
+    --font-body: 'Lato', sans-serif; /* Hoặc 'Nunito Sans' cho cảm giác mềm mại hơn */
 
-    --shadow-soft: 0 4px 15px rgba(0,0,0,0.05);
-    --shadow-medium: 0 8px 25px rgba(0,0,0,0.08);
-    --shadow-strong: 0 12px 35px rgba(0,0,0,0.12);
+    --shadow-soft: 0 4px 15px rgba(0,0,0,0.04);
+    --shadow-medium: 0 8px 25px rgba(0,0,0,0.06);
+    --shadow-strong: 0 12px 35px rgba(0,0,0,0.09);
 
-    --border-radius-small: 8px;
-    --border-radius-medium: 12px;
-    --border-radius-large: 20px;
+    --border-radius-small: 6px;
+    --border-radius-medium: 10px;
+    --border-radius-large: 25px;
     --transition-fast: all 0.25s ease-in-out;
     --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -42,10 +48,10 @@ html {
 
 body {
     font-family: var(--font-body);
-    color: var(--text-medium);
+    color: var(--text-dark-gray);
     background-color: var(--background-light);
     line-height: 1.75;
-    font-size: 16px;
+    font-size: 16px; /* Hoặc 1rem */
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -53,16 +59,17 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    color: var(--text-dark);
+    color: var(--text-darkest);
     font-weight: 700;
     margin-top: 0;
+    line-height: 1.3;
 }
 
-h1 { font-size: 3.5rem; line-height: 1.2; }
-h2 { font-size: 2.75rem; line-height: 1.25; margin-bottom: 0.75em; }
-h3 { font-size: 2rem; line-height: 1.3; }
-h4 { font-size: 1.5rem; line-height: 1.4; }
-h5 { font-size: 1.25rem; line-height: 1.5; }
+h1 { font-size: 3.2rem; }
+h2 { font-size: 2.5rem; margin-bottom: 0.75em; }
+h3 { font-size: 1.9rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.15rem; }
 
 a {
     color: var(--accent-pink);
@@ -71,21 +78,23 @@ a {
 }
 a:hover {
     color: var(--secondary-pink);
-    text-decoration: none;
+    text-decoration: none; /* Giữ nguyên hoặc thêm underline tùy sở thích */
 }
 
-.container {
-    max-width: 1200px;
+.container, .container-fluid { /* Áp dụng cho cả hai loại container */
+    max-width: 1240px; /* Tăng nhẹ max-width cho container */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .section-padding {
-    padding: 80px 0;
+    padding: 90px 0;
 }
 @media (max-width: 768px) {
     .section-padding { padding: 60px 0; }
-    h1 { font-size: 2.8rem; }
-    h2 { font-size: 2.2rem; }
-    h3 { font-size: 1.8rem; }
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    h3 { font-size: 1.6rem; }
 }
 
 .bg-pastel-gradient {
@@ -97,12 +106,13 @@ a:hover {
 
 .eyebrow-text {
     font-family: var(--font-body);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px; /* Tăng letter spacing */
     color: var(--accent-pink);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    display: inline-block; /* Để margin bottom hoạt động đúng */
 }
 .eyebrow-text.light {
     color: var(--text-on-pink-bg);
@@ -110,65 +120,69 @@ a:hover {
 }
 
 .section-title {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 .section-title.light {
-    color: var(--white-pure);
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    color: var(--text-on-dark-bg); /* Chữ trắng hơn trên nền tối */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
 }
-.section-title-alt { /* Cho mục Về Chúng Tôi */
-    font-size: 2.5rem;
+.section-title-alt {
+    font-size: 2.2rem;
     margin-bottom: 20px;
-    color: var(--text-dark);
+    color: var(--text-darkest);
     position: relative;
-    padding-bottom: 10px;
+    padding-bottom: 12px;
+    text-align: left; /* Mặc định cho section-title-alt */
 }
 .section-title-alt::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 0;
-    width: 60px;
+    left: 0; /* Căn trái cho after element */
+    width: 70px;
     height: 3px;
     background-color: var(--accent-pink);
 }
 
 .section-subtitle {
-    font-size: 1.15rem;
-    color: var(--text-light);
-    margin-bottom: 40px;
+    font-size: 1.1rem;
+    color: var(--text-medium-gray);
+    margin-bottom: 50px;
     max-width: 700px;
     line-height: 1.8;
 }
 .section-subtitle.light {
-    color: rgba(253, 254, 254, 0.85); /* text-on-dark-bg with opacity */
+    color: rgba(253, 254, 254, 0.9);
     max-width: 750px;
     margin-left: auto;
     margin-right: auto;
 }
 .section-intro-text {
-    font-size: 1.1rem;
-    color: var(--text-medium);
+    font-size: 1.05rem;
+    color: var(--text-dark-gray);
     font-weight: 400;
     margin-bottom: 1.5rem;
+    line-height: 1.8;
 }
 
 
 .btn {
     font-family: var(--font-body);
-    font-weight: 700;
-    padding: 12px 30px;
+    font-weight: 600; /* Giảm một chút cho dễ đọc hơn */
+    padding: 14px 32px;
     border-radius: var(--border-radius-large);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px; /* Tăng letter spacing */
     transition: var(--transition-smooth);
     font-size: 0.9rem;
     border-width: 2px;
     box-shadow: var(--shadow-soft);
+    line-height: 1.5; /* Đảm bảo chiều cao chữ trong nút */
 }
-.btn:hover {
-    transform: translateY(-3px);
+.btn:hover, .btn:focus {
+    transform: translateY(-2px);
     box-shadow: var(--shadow-medium);
+    outline: none; /* Loại bỏ viền focus mặc định */
 }
 .btn.btn-lg {
     padding: 18px 45px;
@@ -180,7 +194,7 @@ a:hover {
     border-color: var(--accent-pink);
     color: var(--white-pure);
 }
-.btn-primary-custom-filled:hover {
+.btn-primary-custom-filled:hover, .btn-primary-custom-filled:focus {
     background-color: var(--secondary-pink);
     border-color: var(--secondary-pink);
     color: var(--white-pure);
@@ -191,7 +205,7 @@ a:hover {
     border-color: var(--white-pure);
     color: var(--white-pure);
 }
-.btn-outline-custom-light:hover {
+.btn-outline-custom-light:hover, .btn-outline-custom-light:focus {
     background-color: var(--white-pure);
     color: var(--accent-pink);
 }
@@ -201,10 +215,10 @@ a:hover {
     border-color: var(--secondary-blue-accent);
     color: var(--white-pure);
 }
-.btn-secondary-custom:hover {
+.btn-secondary-custom:hover, .btn-secondary-custom:focus {
     background-color: var(--primary-blue-soft);
     border-color: var(--primary-blue-soft);
-    color: var(--text-on-pink-bg);
+    color: var(--text-on-blue-bg);
 }
 
 .btn-outline-primary-custom {
@@ -212,55 +226,43 @@ a:hover {
     color: var(--accent-pink);
     background-color: transparent;
 }
-.btn-outline-primary-custom:hover {
+.btn-outline-primary-custom:hover, .btn-outline-primary-custom:focus {
     background-color: var(--accent-pink);
     color: var(--white-pure);
 }
 
-.btn-cta-outline-light {
-    background-color: transparent;
-    border: 2px solid var(--white-pure);
-    color: var(--white-pure);
-    padding: 14px 35px;
-}
-.btn-cta-outline-light:hover {
-    background-color: var(--white-pure);
-    color: var(--text-on-pink-bg);
-}
-
-
 .navbar.navbar-custom {
-    background-color: rgba(255,255,255,0.95) !important;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+    background-color: rgba(255, 251, 251, 0.97) !important; /* Màu trắng kem hơi trong */
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
     padding-top: 1rem;
     padding-bottom: 1rem;
-    transition: background-color 0.3s ease-in-out, padding 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out, padding 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
-.navbar-custom.scrolled {
+.navbar-custom.scrolled { /* Thêm class này bằng JS khi cuộn */
     background-color: var(--white-pure) !important;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
 }
 .navbar-custom .navbar-brand {
     font-family: var(--font-heading);
-    font-size: 2rem;
+    font-size: 1.8rem; /* Điều chỉnh lại */
     color: var(--accent-pink) !important;
-    font-weight: 800;
+    font-weight: 700; /* Đậm hơn chút */
 }
 .navbar-custom .navbar-nav .nav-link {
-    color: var(--text-medium) !important;
-    font-weight: 600;
-    padding: 0.75rem 1.25rem;
+    color: var(--text-dark-gray) !important; /* Chữ tối hơn trên nền sáng */
+    font-weight: 500; /* Font weight vừa phải */
+    padding: 0.7rem 1.2rem;
     text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.8px;
+    font-size: 0.8rem; /* Chữ nhỏ hơn chút cho thanh lịch */
+    letter-spacing: 1px;
     position: relative;
 }
 .navbar-custom .navbar-nav .nav-link::after {
     content: '';
     position: absolute;
-    bottom: 8px;
+    bottom: 5px; /* Điều chỉnh vị trí gạch chân */
     left: 50%;
     transform: translateX(-50%);
     width: 0;
@@ -270,84 +272,62 @@ a:hover {
 }
 .navbar-custom .navbar-nav .nav-link:hover::after,
 .navbar-custom .navbar-nav .nav-item.active .nav-link::after {
-    width: 60%;
+    width: 50%; /* Giảm độ rộng gạch chân */
 }
 .navbar-custom .navbar-nav .nav-link:hover,
 .navbar-custom .navbar-nav .nav-item.active .nav-link {
     color: var(--accent-pink) !important;
 }
 
-
 .hero-section {
     position: relative;
-    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue-soft) 100%), url('${pageContext.request.contextPath}/images/pastel-banner.jpg') no-repeat center center;
-    background-blend-mode: overlay;
+    /* CHỌN MỘT TRONG HAI KIỂU BACKGROUND DƯỚI ĐÂY HOẶC TÙY CHỈNH */
+    /* Kiểu 1: Gradient màu pastel */
+    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue-soft) 100%);
+    /* Kiểu 2: Ảnh nền với lớp phủ gradient (nếu ảnh của bạn phù hợp) */
+    /* background: linear-gradient(to right, rgba(250, 218, 221, 0.85), rgba(214, 234, 248, 0.85)), url('${pageContext.request.contextPath}/images/your-hero-image.jpg') no-repeat center center; */
+    /* background-blend-mode: multiply; */ /* Hoặc 'overlay' tùy ảnh */
     background-size: cover;
-    color: var(--text-dark);
-    min-height: 90vh;
+    color: var(--text-darkest);
+    min-height: 85vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 120px 0;
-}
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.3); /* Lớp phủ trắng mờ nhẹ */
-    z-index: 1;
+    padding: 100px 0;
 }
 .hero-content {
     position: relative;
     z-index: 2;
-    max-width: 800px;
+    max-width: 750px;
 }
 .hero-title {
-    font-size: 4.8rem;
-    font-weight: 800;
-    color: var(--text-dark);
-    margin-bottom: 25px;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-    line-height: 1.15;
+    font-size: 4.2rem;
+    font-weight: 700; /* Playfair đẹp hơn khi bold */
+    color: var(--text-darkest); /* Chữ tối trên nền pastel sáng */
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 1px 1px 3px rgba(255,255,255,0.3); /* Shadow nhẹ nếu nền có texture */
 }
 .hero-subtitle {
-    font-size: 1.4rem;
-    color: var(--text-medium);
-    margin-bottom: 40px;
+    font-size: 1.3rem;
+    color: var(--text-dark-gray);
+    margin-bottom: 35px;
     font-weight: 300;
     line-height: 1.7;
 }
-.hero-buttons .btn {
-    margin: 0 10px;
-}
-
-@media (max-width: 992px) {
-    .hero-title { font-size: 3.8rem; }
-    .hero-subtitle { font-size: 1.25rem; }
-}
-@media (max-width: 768px) {
-    .hero-section { min-height: 75vh; padding: 100px 0;}
-    .hero-title { font-size: 3rem; }
-    .hero-subtitle { font-size: 1.1rem; }
-    .hero-buttons .btn { margin: 10px 5px; display: block; width: fit-content; margin-left:auto; margin-right:auto;}
-}
-
 
 #about-us .about-image-wrapper {
-    position: relative;
-    border-radius: var(--border-radius-large);
+    border-radius: var(--border-radius-medium);
     overflow: hidden;
+    box-shadow: var(--shadow-medium);
 }
 #about-us .about-image-wrapper img {
-    transition: transform 0.5s ease;
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 #about-us .about-image-wrapper:hover img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
-
 
 .custom-card {
     border-radius: var(--border-radius-medium);
@@ -356,10 +336,13 @@ a:hover {
     transition: var(--transition-smooth);
     background-color: var(--white-pure);
     overflow: hidden;
+    display: flex; /* Cho flexbox layout bên trong card */
+    flex-direction: column; /* Sắp xếp theo chiều dọc */
+    height: 100%; /* Để các card có chiều cao bằng nhau trong một row */
 }
 .custom-card:hover {
     box-shadow: var(--shadow-strong);
-    transform: translateY(-8px);
+    transform: translateY(-7px);
 }
 .custom-card .card-image-link {
     display: block;
@@ -372,199 +355,229 @@ a:hover {
     transition: transform 0.5s ease, filter 0.3s ease;
 }
 .custom-card:hover .card-img-top {
-    transform: scale(1.08);
-    filter: brightness(1.05);
+    transform: scale(1.1);
+    filter: brightness(1.03);
 }
-.service-card .card-img-top {
-    height: 260px;
-    object-fit: cover;
-}
-.nailart-card .card-img-top {
-    height: 320px; /* Mẫu nail có thể cần ảnh vuông hoặc cao hơn */
-    object-fit: cover;
-}
+.service-card .card-img-top { height: 240px; object-fit: cover; }
+.nailart-card .card-img-top { height: 280px; object-fit: cover; }
+
 .custom-card .card-body {
-    padding: 25px;
+    padding: 20px 25px;
+    text-align: center;
+    flex-grow: 1; /* Để card-body chiếm hết không gian còn lại */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Đẩy card-footer xuống dưới nếu có */
 }
 .custom-card .card-title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     margin-bottom: 10px;
-    font-weight: 700;
-}
-.custom-card .card-title a {
-    color: var(--text-dark);
-    text-decoration: none;
-}
-.custom-card .card-title a:hover {
-    color: var(--accent-pink);
+    font-weight: 600; /* Đậm hơn một chút */
 }
 .custom-card .card-text.price {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--accent-pink);
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+}
+.custom-card .card-footer {
+    background-color: transparent;
+    border-top: 1px solid var(--border-soft);
+    padding: 15px 25px;
 }
 
 
 .testimonial-section {
     position: relative;
+    background-color: var(--background-soft-cream);
 }
 .testimonial-item {
     background: var(--white-pure);
     border-radius: var(--border-radius-medium);
     box-shadow: var(--shadow-medium);
-    padding: 35px 30px;
+    padding: 30px 25px;
     text-align: center;
     transition: var(--transition-smooth);
     border-top: 4px solid var(--accent-pink);
+    height: 100%; /* Cho các item có chiều cao bằng nhau */
 }
 .testimonial-item:hover {
-    transform: translateY(-10px) scale(1.02);
+    transform: translateY(-8px) scale(1.01);
     box-shadow: var(--shadow-strong);
 }
-.testimonial-avatar-wrap {
-    margin-bottom: 20px;
-}
+.testimonial-avatar-wrap { margin-bottom: 18px; }
 .testimonial-avatar {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid var(--white-pure);
-    box-shadow: 0 0 0 3px var(--accent-pink), var(--shadow-soft);
+    border: 3px solid var(--white-pure);
+    box-shadow: 0 0 0 2px var(--accent-pink), var(--shadow-soft);
 }
 .testimonial-item p.quote {
-    font-size: 1.05rem;
+    font-size: 1rem; /* Chữ nhỏ hơn chút */
     font-style: italic;
-    color: var(--text-light);
-    margin-bottom: 20px;
+    color: var(--text-medium-gray);
+    margin-bottom: 18px;
     position: relative;
     padding: 0 10px;
+    min-height: 80px; /* Cho các quote có chiều cao tương đối */
 }
 .testimonial-item p.quote::before {
     content: '“';
     font-family: 'Georgia', serif;
-    font-size: 3.5rem;
+    font-size: 3rem;
     color: var(--primary-pink);
     position: absolute;
-    left: -10px;
-    top: -15px;
-    opacity: 0.8;
-    z-index: -1;
+    left: -5px;
+    top: -10px;
+    opacity: 0.7;
+    z-index: 0; /* Đưa ra sau chữ */
 }
 .testimonial-item h5.customer-name {
-    color: var(--text-dark);
+    color: var(--text-darkest);
     font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.15rem;
-    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 3px;
 }
 .testimonial-item p.customer-title {
-    font-size: 0.85rem;
-    color: var(--text-light);
+    font-size: 0.8rem;
+    color: var(--text-light-gray);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-
 .cta-section {
-    background-color: var(--primary-pink);
-    padding: 80px 0;
+    background-color: var(--accent-pink); /* Dùng màu accent chính */
+    color: var(--white-pure);
+    padding: 90px 0;
 }
-.cta-container {
-    background: var(--white-pure);
-    padding: 60px 40px;
-    border-radius: var(--border-radius-large);
-    box-shadow: var(--shadow-strong);
+.cta-container { /* Không cần box trắng riêng nữa, style trực tiếp section */
     text-align: center;
-    max-width: 900px; /* Giới hạn chiều rộng cho CTA box */
-    margin: 0 auto; /* Căn giữa */
 }
 .cta-title {
-    font-size: 2.5rem;
-    color: var(--text-dark);
+    font-size: 2.8rem;
+    color: var(--white-pure);
     font-weight: 700;
     margin-bottom: 15px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 .cta-subtitle {
-    font-size: 1.2rem;
-    color: var(--text-medium);
-    margin-bottom: 30px;
-    max-width: 650px;
+    font-size: 1.25rem;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 35px;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
 }
-.cta-section .btn-primary-custom-filled.btn-lg {
-    padding: 20px 50px;
+.cta-section .btn-cta-custom { /* Đổi tên cho rõ ràng */
+    background-color: var(--white-pure);
+    border-color: var(--white-pure);
+    color: var(--accent-pink);
+    padding: 18px 45px;
     font-size: 1.1rem;
 }
-
+.cta-section .btn-cta-custom:hover {
+    background-color: var(--primary-blue-soft); /* Hover sang màu xanh pastel */
+    border-color: var(--primary-blue-soft);
+    color: var(--text-on-blue-bg); /* Chữ tối trên nền xanh nhạt */
+    transform: scale(1.03) translateY(-2px);
+}
 
 footer.site-footer {
-    background-color: var(--text-dark);
+    background-color: var(--text-darkest); /* Nền tối hơn */
     color: var(--text-on-dark-bg);
-    padding: 60px 0 30px;
-    font-size: 0.95rem;
+    padding: 70px 0 20px;
+    font-size: 0.9rem;
 }
-.site-footer a {
-    color: var(--primary-pink);
-    opacity: 0.8;
-}
-.site-footer a:hover {
-    color: var(--white-pure);
-    opacity: 1;
-}
+.site-footer a { color: var(--secondary-pink); opacity: 0.9; }
+.site-footer a:hover { color: var(--white-pure); opacity: 1; }
 .site-footer h5.footer-title {
     color: var(--white-pure);
     font-family: var(--font-heading);
     margin-bottom: 20px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
 }
-.footer-links {
-    list-style: none;
-    padding-left: 0;
-}
-.footer-links li {
-    margin-bottom: 10px;
-}
-.footer-links li a {
-    display: inline-block;
-    position: relative;
-}
+.footer-links { list-style: none; padding-left: 0; }
+.footer-links li { margin-bottom: 12px; } /* Tăng khoảng cách */
+.footer-links li a { display: inline-block; position: relative; }
 .footer-links li a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 1px;
-    display: block;
-    margin-top: 2px;
-    right: 0;
-    background: var(--primary-pink);
-    transition: width .3s ease;
+    content: ''; position: absolute; width: 0; height: 1px;
+    display: block; margin-top: 3px; right: 0;
+    background: var(--secondary-pink); transition: width .3s ease;
 }
 .footer-links li a:hover::after {
-    width: 100%;
-    left: 0;
-    background: var(--white-pure);
+    width: 100%; left: 0; background: var(--white-pure);
 }
 .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 30px;
-    margin-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 25px;
+    margin-top: 35px;
     text-align: center;
     font-size: 0.85rem;
-    color: rgba(253, 254, 254, 0.7);
+    color: rgba(253, 254, 254, 0.75);
 }
 
-@media (max-width: 768px) {
-    .site-footer { text-align: center; }
-    .footer-column { margin-bottom: 30px; }
+
+/* CSS cho các trang khách hàng khác - customer-page-container, customer-page-title, v.v... */
+/* Giữ nguyên các style cho .catalog-card, .filter-form, .booking-form-container, ... */
+/* như đã cung cấp ở câu trả lời trước, chỉ cần đảm bảo chúng dùng các biến màu mới */
+
+/* Ví dụ cho catalog-card dùng biến mới */
+.catalog-card .card-title a:hover { color: var(--accent-pink); }
+.catalog-card .service-price,
+.catalog-card .nailart-addon-price { color: var(--accent-pink); }
+.catalog-card .btn-book-now {
+    background-color: var(--accent-pink);
+    border-color: var(--accent-pink);
+}
+.catalog-card .btn-book-now:hover {
+    background-color: var(--secondary-pink);
+    border-color: var(--secondary-pink);
 }
 
-/* Fix cho một số vấn đề nhỏ của Bootstrap với JSP EL trong URL */
-img[src*="${fn:replace("] {
-    /* No specific style needed, just ensures selector is valid if such a case appears */
+/* Booking Form */
+.booking-form-container h4 { color: var(--accent-pink); border-bottom-color: var(--secondary-blue-accent); }
+.booking-form-container .btn-primary { background-color: var(--accent-pink); border-color: var(--accent-pink); }
+.booking-form-container .btn-primary:hover { background-color: var(--secondary-pink); border-color: var(--secondary-pink); }
+#availableSlotsContainer .time-slot.btn-primary { background-color: var(--secondary-blue-accent); border-color: var(--secondary-blue-accent); }
+#availableSlotsContainer .time-slot.btn-outline-primary { border-color: var(--secondary-blue-accent); color: var(--secondary-blue-accent); }
+#availableSlotsContainer .time-slot.btn-outline-primary:hover { background-color: var(--secondary-blue-accent); color: var(--white-pure); }
+
+/* My Appointments */
+.my-appointments-table th { background-color: var(--primary-blue-soft); color: var(--text-on-blue-bg); }
+.appointment-detail-card .card-header h3 { color: var(--accent-pink); }
+.detail-section h5 { color: var(--secondary-blue-accent); }
+
+/* Review Form */
+.review-form-container .star-rating input[type="radio"]:checked ~ label,
+.review-form-container .star-rating label:hover,
+.review-form-container .star-rating label:hover ~ label { color: var(--gold-accent); }
+.review-form-container .btn-primary { background-color: var(--accent-pink); border-color: var(--accent-pink); }
+.review-form-container .btn-primary:hover{ background-color: var(--secondary-pink); border-color: var(--secondary-pink); }
+
+
+/* Animation */
+@keyframes fadeInUpSlight {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animated-fadeInUpSlight { /* Class để áp dụng animation */
+    animation: fadeInUpSlight 0.8s ease-out;
+    animation-fill-mode: backwards; /* Để style áp dụng ngay cả khi chưa chạy animation */
+}
+
+/* Hiệu ứng cho các section khi cuộn tới (cần JavaScript Intersection Observer) */
+.section-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.section-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
