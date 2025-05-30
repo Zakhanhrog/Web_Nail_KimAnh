@@ -1,0 +1,159 @@
+/* src/main/webapp/css/admin-style.css */
+
+body {
+    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font dễ đọc cho admin */
+    background-color: #f4f7f6; /* Màu nền xám nhạt cho toàn trang admin */
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.admin-container { /* Class bọc nội dung chính của các trang admin */
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+/* --- Navbar Admin --- */
+.admin-navbar { /* Class mới cho navbar admin, hoặc bạn có thể style .navbar trực tiếp nếu chỉ dùng 1 layout admin */
+    background-color: #343a40; /* Màu tối cho navbar admin */
+    border-bottom: 3px solid #007bff; /* Đường viền màu xanh làm điểm nhấn */
+}
+.admin-navbar .navbar-brand {
+    font-weight: bold;
+    color: #fff;
+}
+.admin-navbar .nav-link {
+    color: rgba(255,255,255,0.75);
+}
+.admin-navbar .nav-link:hover,
+.admin-navbar .nav-item.active .nav-link {
+    color: #fff;
+}
+.admin-navbar .dropdown-menu {
+    background-color: #343a40;
+    border-color: #454d55;
+}
+.admin-navbar .dropdown-item {
+    color: rgba(255,255,255,0.75);
+}
+.admin-navbar .dropdown-item:hover,
+.admin-navbar .dropdown-item:focus {
+    color: #fff;
+    background-color: #007bff;
+}
+
+
+/* --- Tiêu đề trang Admin --- */
+.admin-page-title {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    color: #2c3e50;
+}
+
+/* --- Bảng dữ liệu Admin --- */
+.table th { /* Style cho header của bảng */
+    background-color: #e9ecef; /* Màu nền xám nhạt cho header */
+    color: #495057;
+    font-weight: 600;
+    vertical-align: middle !important;
+    border-bottom-width: 2px;
+}
+.table td {
+    vertical-align: middle !important;
+}
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+.table .badge { /* Style cho các badge trạng thái */
+    font-size: 0.85em;
+    padding: .4em .6em;
+}
+.table .action-buttons a,
+.table .action-buttons button {
+    margin-right: 5px;
+    margin-bottom: 5px; /* Cho responsive */
+}
+
+
+/* --- Form Admin --- */
+.admin-form .card {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.admin-form .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+.admin-form .form-group label {
+    font-weight: 500;
+    color: #495057;
+}
+.admin-form .form-control,
+.admin-form .custom-select {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+.admin-form .form-control:focus,
+.admin-form .custom-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+.admin-form .btn { /* Nút trong form */
+    margin-right: 10px;
+}
+.admin-form .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.admin-form .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+
+/* --- Nút bấm chung --- */
+.btn {
+    border-radius: 0.25rem;
+    padding: .5rem 1rem;
+    font-size: 0.9rem;
+}
+.btn-success { background-color: #28a745; border-color: #28a745; }
+.btn-danger { background-color: #dc3545; border-color: #dc3545; }
+.btn-warning { background-color: #ffc107; border-color: #ffc107; color: #212529; }
+.btn-info { background-color: #17a2b8; border-color: #17a2b8; }
+
+
+/* --- Footer Admin --- */
+.admin-footer { /* Class cho footer admin */
+    background-color: #e9ecef;
+    color: #6c757d;
+    padding: 20px 0;
+    font-size: 0.85rem;
+    border-top: 1px solid #dee2e6;
+}
+.admin-footer a {
+    color: #007bff;
+}
+.admin-footer a:hover {
+    color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .admin-page-title {
+        font-size: 1.5rem;
+    }
+    .admin-form .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .admin-form .btn:last-child {
+        margin-bottom: 0;
+    }
+}
