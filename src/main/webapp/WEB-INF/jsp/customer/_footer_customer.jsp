@@ -5,7 +5,7 @@
 --%>
 <footer class="py-4 site-footer mt-auto"> <%-- Thêm class site-footer nếu có style riêng trong custom-style.css --%>
   <div class="container text-center">
-    <small>Copyright © Tiệm Nail XYZ ${java.time.Year.now()}</small> <%-- Lấy năm hiện tại động --%>
+    <small>Copyright © KimiBeauty ${java.time.Year.now()}</small> <%-- Lấy năm hiện tại động --%>
   </div>
 </footer>
 

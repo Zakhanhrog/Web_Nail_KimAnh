@@ -6,7 +6,7 @@
 --%>
 <head>
     <%-- Các thẻ meta charset, viewport đã có trong từng trang con --%>
-    <%-- <title>Trang Quản Trị - Tiệm Nail XYZ</title> --%> <%-- Title sẽ được set bởi trang con --%>
+    <%-- <title>Trang Quản Trị - KimiBeauty</title> --%> <%-- Title sẽ được set bởi trang con --%>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/admin-style.css" rel="stylesheet"> <%-- Link đến CSS Admin --%>
     <%-- Thêm link Google Fonts nếu bạn dùng font khác cho admin --%>
@@ -17,7 +17,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark admin-navbar sticky-top"> <%-- Thêm class admin-navbar và sticky-top --%>
     <div class="container-fluid"> <%-- Container-fluid để navbar rộng hơn --%>
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/admin/dashboard">Admin Panel - Tiệm Nail XYZ</a>
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/admin/dashboard">Admin Panel - KimiBeauty</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#adminNavbarResponsive" aria-controls="adminNavbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

@@ -147,7 +147,7 @@ public class UserDAO {
             conn = DBUtil.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPasswordHash());
+            ps.setString(2, user.getPasswordHash()); // Đảm bảo set password_hash
             ps.setString(3, user.getPhoneNumber());
             ps.setString(4, user.getFullName());
             ps.setString(5, user.getRole());
@@ -163,8 +163,6 @@ public class UserDAO {
     }
 
     public boolean deleteUser(int userId) throws SQLException {
-        // Cân nhắc: Xóa mềm (đặt is_active = false) hay xóa cứng?
-        // Trigger trong DB đã xử lý xóa customer/staff info liên quan khi user bị xóa
         String sql = "DELETE FROM users WHERE user_id = ?";
         Connection conn = null;
         PreparedStatement ps = null;
@@ -182,7 +180,6 @@ public class UserDAO {
         return rowsAffected > 0;
     }
 
-    // Helper method to map ResultSet to User object
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         User user = new User();
         user.setUserId(rs.getInt("user_id"));

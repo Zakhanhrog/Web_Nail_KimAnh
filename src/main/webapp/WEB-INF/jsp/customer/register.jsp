@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng Ký Tài Khoản - Tiệm Nail XYZ</title>
+  <title>Đăng Ký Tài Khoản - KimiBeauty</title>
   <jsp:include page="_header_customer.jsp" />
   <%-- Sử dụng lại style của auth-container, auth-card từ login.jsp nếu phù hợp --%>
   <style>

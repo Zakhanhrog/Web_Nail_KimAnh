@@ -11,19 +11,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiệm Nail XYZ - Nơi Vẻ Đẹp Thăng Hoa</title>
+    <title>KimiBeauty - Nơi Vẻ Đẹp Thăng Hoa</title>
     <jsp:include page="/WEB-INF/jsp/customer/_header_customer.jsp">
-        <jsp:param name="pageTitle" value="Trang Chủ - Tiệm Nail XYZ"/>
+        <jsp:param name="pageTitle" value="Trang Chủ - KimiBeauty"/>
     </jsp:include>
-    <%-- custom-style.css đã được include trong _header_customer.jsp --%>
 </head>
 <body>
-<%-- Navbar đã được include --%>
-
 <section class="hero-section">
-    <div class="hero-overlay"></div> <%-- Lớp phủ nếu cần --%>
+    <div class="hero-overlay"></div>
     <div class="container hero-content">
-        <h1 class="hero-title animated-fadeInUpSlight">Tiệm Nail XYZ</h1>
+        <h1 class="hero-title animated-fadeInUpSlight">KimiBeauty</h1>
         <p class="lead hero-subtitle animated-fadeInUpSlight" style="animation-delay: 0.3s;">Nơi mỗi thiết kế móng là một tác phẩm nghệ thuật, mang đến vẻ đẹp tinh tế và phong cách độc đáo cho bạn.</p>
         <div class="hero-buttons animated-fadeInUpSlight" style="animation-delay: 0.6s;">
             <a href="${pageContext.request.contextPath}/customer/book-appointment" class="btn btn-primary-custom btn-lg">Đặt Lịch Ngay</a>
@@ -68,7 +65,7 @@
             <div class="col-md-6 order-md-2 animated-fadeInUpSlight">
                 <p class="eyebrow-text">Câu Chuyện Của Chúng Tôi</p>
                 <h2 class="section-title-alt">Hành Trình Kiến Tạo Vẻ Đẹp</h2>
-                <p class="section-intro-text">Khởi đầu từ niềm đam mê với nghệ thuật làm móng và mong muốn mang đến một không gian thư giãn đích thực, Tiệm Nail XYZ được thành lập vào năm 20XX. Trải qua nhiều năm phát triển, chúng tôi tự hào đã trở thành điểm đến tin cậy của hàng ngàn khách hàng.</p>
+                <p class="section-intro-text">Khởi đầu từ niềm đam mê với nghệ thuật làm móng và mong muốn mang đến một không gian thư giãn đích thực, KimiBeauty được thành lập vào năm 20XX. Trải qua nhiều năm phát triển, chúng tôi tự hào đã trở thành điểm đến tin cậy của hàng ngàn khách hàng.</p>
                 <p>Chúng tôi không ngừng nỗ lực học hỏi, cải tiến kỹ thuật và đầu tư vào những sản phẩm tốt nhất. Mỗi khách hàng đến với XYZ không chỉ nhận được một bộ móng đẹp mà còn là những khoảnh khắc thư thái, được chăm sóc và nâng niu.</p>
                 <ul class="list-unstyled mt-3" style="color: var(--text-dark-gray);">
                     <li class="mb-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="var(--accent-pink)" class="bi bi-check-circle-fill mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg> Cam kết chất lượng dịch vụ hàng đầu.</li>
@@ -78,7 +75,7 @@
             </div>
             <div class="col-md-6 order-md-1 animated-fadeInUpSlight" style="animation-delay: 0.2s;">
                 <div class="about-image-wrapper">
-                    <img src="${pageContext.request.contextPath}/images/our-story-image.jpg" alt="Đội ngũ Tiệm Nail XYZ" class="img-fluid">
+                    <img src="${pageContext.request.contextPath}/images/our-story-image.jpg" alt="Đội ngũ KimiBeauty" class="img-fluid">
                     <%-- Thay bằng ảnh phù hợp --%>
                 </div>
             </div>
@@ -185,7 +182,7 @@
     <div class="container cta-container">
         <p class="eyebrow-text" style="color: rgba(255,255,255,0.8);">Đừng Chần Chừ</p>
         <h3 class="cta-title">Sẵn Sàng Cho Vẻ Đẹp Hoàn Hảo?</h3>
-        <p class="cta-subtitle">Hãy để Tiệm Nail XYZ đồng hành cùng bạn trên hành trình khám phá và tôn vinh nét đẹp riêng. Đặt lịch hẹn ngay hôm nay để trải nghiệm dịch vụ đẳng cấp!</p>
+        <p class="cta-subtitle">Hãy để KimiBeauty đồng hành cùng bạn trên hành trình khám phá và tôn vinh nét đẹp riêng. Đặt lịch hẹn ngay hôm nay để trải nghiệm dịch vụ đẳng cấp!</p>
         <a href="${pageContext.request.contextPath}/customer/book-appointment" class="btn btn-cta-custom btn-lg">Đặt Lịch Hẹn Ngay</a>
     </div>
 </section>

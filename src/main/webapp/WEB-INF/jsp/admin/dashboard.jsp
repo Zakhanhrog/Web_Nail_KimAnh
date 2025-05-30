@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Admin Dashboard - Tiệm Nail XYZ</title>
+  <title>Admin Dashboard - KimiBeauty</title>
   <jsp:include page="_header_admin.jsp" />
   <style>
     .dashboard-card {

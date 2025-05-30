@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lịch Hẹn Của Tôi - Tiệm Nail XYZ</title>
+    <title>Lịch Hẹn Của Tôi - KimiBeauty</title>
     <jsp:include page="_header_customer.jsp" />
     <style>
         .table th {

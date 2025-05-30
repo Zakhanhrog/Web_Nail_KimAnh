@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đặt Lịch Thành Công - Tiệm Nail XYZ</title>
+  <title>Đặt Lịch Thành Công - KimiBeauty</title>
   <jsp:include page="_header_customer.jsp" />
   <style>
     .success-container {
@@ -64,7 +64,7 @@
       </svg>
     </div>
     <h3>Đặt Lịch Thành Công!</h3>
-    <p>Cảm ơn bạn đã đặt lịch hẹn tại Tiệm Nail XYZ. Lịch hẹn của bạn (ID: <strong class="appointment-id">#${param.appointmentId}</strong>) đã được ghi nhận và đang chờ xác nhận từ chúng tôi.</p>
+    <p>Cảm ơn bạn đã đặt lịch hẹn tại KimiBeauty. Lịch hẹn của bạn (ID: <strong class="appointment-id">#${param.appointmentId}</strong>) đã được ghi nhận và đang chờ xác nhận từ chúng tôi.</p>
     <p>Chúng tôi sẽ sớm liên hệ với bạn qua email hoặc điện thoại. Bạn có thể xem lại lịch hẹn trong mục "Lịch Hẹn Của Tôi".</p>
     <hr class="my-4">
     <div class="success-actions">

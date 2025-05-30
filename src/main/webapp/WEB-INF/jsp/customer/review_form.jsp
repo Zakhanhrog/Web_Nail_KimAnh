@@ -8,7 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Viết Đánh Giá Dịch Vụ - Tiệm Nail XYZ</title>
+  <title>Viết Đánh Giá Dịch Vụ - KimiBeauty</title>
   <jsp:include page="_header_customer.jsp" />
   <style>
     /* Các style cho star-rating đã có trong custom-style.css */

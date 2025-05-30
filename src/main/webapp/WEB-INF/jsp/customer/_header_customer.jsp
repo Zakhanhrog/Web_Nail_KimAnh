@@ -14,7 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
   <%-- Title sẽ được set bởi trang JSP con, nhưng có thể có title mặc định ở đây --%>
-  <%-- <title>Tiệm Nail XYZ</title> --%>
+  <%-- <title>KimiBeauty</title> --%>
 
   <!-- Bootstrap CSS từ CDN -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -33,7 +33,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom"> <%-- Sử dụng class navbar-custom --%>
   <div class="container">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/">Tiệm Nail XYZ</a>
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/">KimiBeauty</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -64,7 +64,7 @@
                 Chào, <c:out value="${sessionScope.loggedInUser.fullName}"/>
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownUser">
-                <a class="dropdown-item" href="#">Hồ Sơ Của Tôi</a>
+                <a class="dropdown-item" href="${pageContext.request.contextPath}/customer/profile/view">Hồ Sơ Của Tôi</a>
                 <div class="dropdown-divider"></div>
                 <c:if test="${sessionScope.loggedInUser.role == 'admin' || sessionScope.loggedInUser.role == 'staff' || sessionScope.loggedInUser.role == 'cashier'}">
                   <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/dashboard">Trang Quản Trị</a>

@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đặt Lịch Hẹn - Tiệm Nail XYZ</title>
+    <title>Đặt Lịch Hẹn - KimiBeauty</title>
     <jsp:include page="_header_customer.jsp" />
     <style>
         .selected-services-container .service-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-soft); }

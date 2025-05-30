@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng Nhập - Tiệm Nail XYZ</title>
+  <title>Đăng Nhập - KimiBeauty</title>
   <jsp:include page="_header_customer.jsp" />
   <style>
     .auth-container {

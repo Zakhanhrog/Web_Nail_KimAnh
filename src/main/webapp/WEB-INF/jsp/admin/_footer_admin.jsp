@@ -2,7 +2,7 @@
 <footer class="py-3 admin-footer mt-auto"> <%-- Thêm class admin-footer --%>
     <div class="container-fluid px-4">
         <div class="d-flex align-items-center justify-content-between small">
-            <div class="text-muted">Bản quyền © Tiệm Nail XYZ (Admin Panel) ${java.time.Year.now()}</div>
+            <div class="text-muted">Bản quyền © KimiBeauty (Admin Panel) ${java.time.Year.now()}</div>
             <div>
                 <%-- <a href="#">Privacy Policy</a> · <a href="#">Terms & Conditions</a> --%>
             </div>

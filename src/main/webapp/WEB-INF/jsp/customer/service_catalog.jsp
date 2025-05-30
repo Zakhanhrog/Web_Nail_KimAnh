@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh Sách Dịch Vụ - Tiệm Nail XYZ</title>
+    <title>Danh Sách Dịch Vụ - KimiBeauty</title>
     <%-- Link Google Fonts và Bootstrap đã có trong _header_customer.jsp --%>
     <jsp:include page="_header_customer.jsp" />
     <%-- custom-style.css cũng đã được include trong _header_customer.jsp --%>
