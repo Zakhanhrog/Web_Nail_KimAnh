@@ -20,9 +20,10 @@
       </h3>
     </div>
     <div class="card-body">
-      <form action="${pageContext.request.contextPath}/admin/services/${service != null ? 'update' : 'insert'}" method="post">
+      <form action="${pageContext.request.contextPath}/admin/services/${service != null ? 'update' : 'insert'}" method="post" enctype="multipart/form-data">
         <c:if test="${service != null}">
           <input type="hidden" name="serviceId" value="<c:out value='${service.serviceId}' />" />
+          <input type="hidden" name="existingImageUrl" value="<c:out value='${service.imageUrl}' />" />
         </c:if>
 
         <div class="form-group">
@@ -52,9 +53,16 @@
         </div>
 
         <div class="form-group">
-          <label for="imageUrl">URL Hình Ảnh (tùy chọn):</label>
-          <input type="url" class="form-control" id="imageUrl" name="imageUrl" value="<c:out value='${service.imageUrl}' />">
+          <label for="imageFile">Hình Ảnh Dịch Vụ:</label>
+          <input type="file" class="form-control-file" id="imageFile" name="imageFile" accept="image/*">
+          <c:if test="${service != null && service.imageUrl != null}">
+            <div class="mt-2">
+              <img src="${pageContext.request.contextPath}/${service.imageUrl}" alt="Ảnh dịch vụ hiện tại" style="max-width: 200px; max-height: 200px;">
+            </div>
+          </c:if>
         </div>
+        <!-- Ẩn trường nhập URL ảnh thủ công -->
+        <input type="hidden" name="imageUrl" value="<c:out value='${service.imageUrl}' />">
 
         <div class="form-group form-check">
           <input type="checkbox" class="form-check-input" id="isActive" name="isActive" <c:if test="${service == null || service.active}">checked</c:if>>
@@ -69,3 +77,4 @@
 </div>
 </body>
 </html>
+

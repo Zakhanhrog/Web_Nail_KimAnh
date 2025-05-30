@@ -33,6 +33,7 @@
       <th>Thời Lượng (phút)</th>
       <th>Phân Loại</th>
       <th>Trạng Thái</th>
+      <th>Hình Ảnh</th>
       <th>Hành Động</th>
     </tr>
     </thead>
@@ -52,6 +53,11 @@
             <span class="badge badge-danger">Không hoạt động</span>
           </c:if>
         </td>
+        <td>
+          <c:if test="${not empty service.imageUrl}">
+            <img src="${pageContext.request.contextPath}/${service.imageUrl}" alt="Ảnh dịch vụ" style="max-width: 80px; max-height: 80px;">
+          </c:if>
+        </td>
         <td class="action-links">
           <a href="${pageContext.request.contextPath}/admin/services/edit?id=<c:out value='${service.serviceId}' />" class="btn btn-sm btn-primary">Sửa</a>
           <a href="${pageContext.request.contextPath}/admin/services/delete?id=<c:out value='${service.serviceId}' />" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa dịch vụ này không?')">Xóa</a>
@@ -60,7 +66,7 @@
     </c:forEach>
     <c:if test="${empty listService}">
       <tr>
-        <td colspan="7" class="text-center">Không có dịch vụ nào.</td>
+        <td colspan="8" class="text-center">Không có dịch vụ nào.</td>
       </tr>
     </c:if>
     </tbody>
@@ -73,3 +79,4 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+

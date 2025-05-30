@@ -27,8 +27,8 @@ public class NailArtServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private NailArtDAO nailArtDAO;
     private NailArtCollectionDAO collectionDAO;
-    private static final String UPLOAD_DIRECTORY = "images/nailarts";
-
+    private static final String ABSOLUTE_NAILART_STORAGE_PATH = "/Users/ngogiakhanh/Documents/TiemNailApp/images_app/TiemNailUploadStorage/nailarts";
+    private static final String RELATIVE_NAILART_ACCESS_PATH_FOR_DB = "uploads/nailarts";
 
     public void init() {
         nailArtDAO = new NailArtDAO();
@@ -39,7 +39,25 @@ public class NailArtServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-        doGet(request, response);
+        String action = request.getPathInfo();
+        if (action == null) {
+            action = "/list";
+        }
+        try {
+            switch (action) {
+                case "/insert":
+                    insertNailArt(request, response);
+                    break;
+                case "/update":
+                    updateNailArt(request, response);
+                    break;
+                default:
+                    doGet(request, response);
+                    break;
+            }
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -112,33 +130,38 @@ public class NailArtServlet extends HttpServlet {
         String[] items = contentDisp.split(";");
         for (String s : items) {
             if (s.trim().startsWith("filename")) {
-                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+                String originalFileName = s.substring(s.indexOf("=") + 2, s.length() - 1);
+                return java.nio.file.Paths.get(originalFileName).getFileName().toString();
             }
         }
         return "";
     }
 
-    private String saveUploadedFile(HttpServletRequest request, Part filePart) throws IOException {
+    private String saveUploadedFile(Part filePart) throws IOException {
         if (filePart == null || filePart.getSize() == 0) {
-            return null; // Không có file hoặc file rỗng
+            return null;
         }
-
-        String fileName = System.currentTimeMillis() + "_" + extractFileName(filePart);
-        String applicationPath = request.getServletContext().getRealPath("");
-        String uploadFilePath = applicationPath + File.separator + UPLOAD_DIRECTORY;
-
-        File fileSaveDir = new File(uploadFilePath);
-        if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdirs();
+        String originalFileName = extractFileName(filePart);
+        if (originalFileName.isEmpty()) {
+            return null;
         }
-
-        String filePath = uploadFilePath + File.separator + fileName;
-        filePart.write(filePath);
-
-        // Trả về đường dẫn tương đối để lưu vào DB và hiển thị trên web
-        return UPLOAD_DIRECTORY + "/" + fileName;
+        String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName.replaceAll("[^a-zA-Z0-9._-]", "_");
+        File uploadDir = new File(ABSOLUTE_NAILART_STORAGE_PATH);
+        if (!uploadDir.exists()) {
+            if (!uploadDir.mkdirs()) {
+                System.err.println("Không thể tạo thư mục upload: " + ABSOLUTE_NAILART_STORAGE_PATH);
+                throw new IOException("Không thể tạo thư mục upload tại: " + ABSOLUTE_NAILART_STORAGE_PATH);
+            }
+        }
+        String absoluteFilePath = ABSOLUTE_NAILART_STORAGE_PATH + File.separator + uniqueFileName;
+        try {
+            filePart.write(absoluteFilePath);
+        } catch (IOException e) {
+            System.err.println("Lỗi khi ghi file: " + absoluteFilePath);
+            throw e;
+        }
+        return RELATIVE_NAILART_ACCESS_PATH_FOR_DB + "/" + uniqueFileName;
     }
-
 
     private void insertNailArt(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
@@ -156,16 +179,19 @@ public class NailArtServlet extends HttpServlet {
         String imageUrl = null;
         Part filePart = request.getPart("imageFile"); // "imageFile" là name của input type="file"
         if (filePart != null && filePart.getSize() > 0) {
-            imageUrl = saveUploadedFile(request, filePart);
-            if (imageUrl == null) {
-                request.setAttribute("errorMessage", "Lỗi khi tải ảnh lên.");
-                loadCollectionsForForm(request); // Nạp lại collections
+            try {
+                imageUrl = saveUploadedFile(filePart);
+            } catch (IOException e) {
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Lỗi khi tải ảnh lên: " + e.getMessage());
+                loadCollectionsForForm(request);
+                request.setAttribute("nailArtName", name);
+                request.setAttribute("description", description);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin/nail_art_form.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
         }
-
 
         NailArt newNailArt = new NailArt();
         newNailArt.setNailArtName(name);
@@ -204,13 +230,13 @@ public class NailArtServlet extends HttpServlet {
         String imageUrl = existingImageUrl; // Mặc định giữ ảnh cũ
         Part filePart = request.getPart("imageFile");
         if (filePart != null && filePart.getSize() > 0) {
-            // Nếu có ảnh mới, xóa ảnh cũ (nếu có và cần thiết)
-            // ... (logic xóa file cũ - tùy chọn) ...
-            imageUrl = saveUploadedFile(request, filePart);
-            if (imageUrl == null) {
-                request.setAttribute("errorMessage", "Lỗi khi tải ảnh lên.");
-                request.setAttribute("nailArt", nailArt); // Giữ lại thông tin nail art hiện tại
-                loadCollectionsForForm(request); // Nạp lại collections
+            try {
+                imageUrl = saveUploadedFile(filePart);
+            } catch (IOException e) {
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Lỗi khi tải ảnh mới lên: " + e.getMessage());
+                request.setAttribute("nailArt", nailArtDAO.getNailArtById(id));
+                loadCollectionsForForm(request);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin/nail_art_form.jsp");
                 dispatcher.forward(request, response);
                 return;
@@ -237,3 +263,4 @@ public class NailArtServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/admin/nail-arts/list");
     }
 }
+

@@ -190,6 +190,19 @@ public class NailArtDAO {
         return rowsAffected > 0;
     }
 
+    // Thêm phương thức mẫu để thêm ảnh mẫu vào DB
+    public void insertSampleNailArt() throws SQLException {
+        NailArt sample = new NailArt();
+        sample.setNailArtName("Mẫu Nail Đẹp 1");
+        sample.setDescription("Mẫu nail nghệ thuật đẹp, hiện đại.");
+        sample.setPriceAddon(new java.math.BigDecimal("50000"));
+        sample.setCollectionId(null);
+        sample.setImageUrl("uploaded_images/nailarts/sample_nail_1.jpg");
+        sample.setActive(true);
+        sample.setLikesCount(0);
+        addNailArt(sample);
+    }
+
     private NailArt mapResultSetToNailArt(ResultSet rs) throws SQLException {
         NailArt nailArt = new NailArt();
         nailArt.setNailArtId(rs.getInt("nail_art_id"));
@@ -205,3 +218,4 @@ public class NailArtDAO {
         return nailArt;
     }
 }
+

@@ -146,14 +146,14 @@ public class CustomerAppointmentServlet extends HttpServlet {
         boolean canCancel = false;
         if ("pending_confirmation".equals(appointment.getStatus()) || "confirmed".equals(appointment.getStatus())) {
             Timestamp appointmentTime = appointment.getAppointmentDatetime();
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.HOUR_OF_DAY, 24);
-            Timestamp cancelDeadline = new Timestamp(cal.getTimeInMillis());
-
-            if (appointmentTime.after(cancelDeadline)) {
+            Calendar now = Calendar.getInstance();
+            Calendar appointmentCal = Calendar.getInstance();
+            appointmentCal.setTime(appointmentTime);
+            now.add(Calendar.HOUR_OF_DAY, 24);
+            if (appointmentCal.after(now)) {
                 canCancel = true;
             } else {
-                request.setAttribute("errorMessage", "Đã quá thời gian cho phép hủy lịch hẹn này.");
+                request.setAttribute("errorMessage", "Đã quá thời gian cho phép hủy lịch hẹn này. Bạn chỉ có thể hủy trước ít nhất 24 giờ.");
             }
         } else {
             request.setAttribute("errorMessage", "Lịch hẹn này không thể hủy do trạng thái hiện tại.");
@@ -170,3 +170,4 @@ public class CustomerAppointmentServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/customer/my-appointments/list");
     }
 }
+

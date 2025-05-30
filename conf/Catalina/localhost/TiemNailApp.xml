@@ -1,0 +1,7 @@
+<Context>
+    <Resources>
+        <PreResources className="org.apache.catalina.webresources.DirResourceSet"
+                      webAppMount="/uploads"
+                      base="/Users/ngogiakhanh/Documents/TiemNailApp/images_app/TiemNailUploadStorage" />
+    </Resources>
+</Context>
