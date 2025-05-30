@@ -18,76 +18,11 @@
       <change afterPath="$PROJECT_DIR$/../Module3/Bai2/EX4_README.MD" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../Module3/Bai2/EX5_README.MD" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../Module3/Bai2/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/AdminDashboardServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/AppointmentServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/AuthServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/BookingServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/CustomerAppointmentServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/CustomerNailArtServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/CustomerServiceServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/ExpenseServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/NailArtCollectionServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/NailArtServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/ReviewServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/ServiceServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/StaffScheduleServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/UserServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDetailDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/CustomerDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/ExpenseDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/NailArtCollectionDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/NailArtDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/ReviewDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/ServiceDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/StaffDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/StaffScheduleDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/UserDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/filter/AuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/Appointment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/AppointmentDetail.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/Customer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/Expense.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/NailArt.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/NailArtCollection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/Review.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/Service.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/Staff.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/StaffSchedule.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/util/DBUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/util/PasswordUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/appointment_form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/appointment_list.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/appointment_view.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/collection_form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/collection_list.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/dashboard.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/expense_form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/expense_list.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/nail_art_form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/nail_art_list.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/service_form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/service_list.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/staff_schedule_form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/staff_schedule_list.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/user_form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/user_list.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/_footer_customer.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/_header_customer.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking-success.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking_form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/login.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/my_appointment_list.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/my_appointment_view.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/nail_art_catalog.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/register.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/review_form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/service_catalog.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/css/custom-style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/ReportServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/_footer_admin.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/_header_admin.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/report_popular_services.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/report_revenue.jsp" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../trangcanhan_thanhbach/.idea/trangcanhan_thanhbach.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../zk_Interview/AI_Interview_Project/.idea/AI_Interview_Project.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../zk_Interview/AI_Interview_Project/backend/.env" afterDir="false" />
@@ -140,6 +75,13 @@
       <change beforePath="$PROJECT_DIR$/../Module2_TEST/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Module2_TEST/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Module2_TEST/src/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/BookingServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/BookingServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDetailDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDetailDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking_form.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking_form.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../caseStudy_Mod2/.idea/caseStudy_Mod2.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -177,14 +119,14 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="CSS File" />
         <option value="Class" />
         <option value="Jsp File" />
-        <option value="CSS File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -222,6 +164,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Tomcat Server.Tomcat 9.0.105.executor": "Run",
     "git-widget-placeholder": "main",
     "list.type.of.created.stylesheet": "CSS",
@@ -357,7 +300,7 @@
       <workItem from="1748531931074" duration="305000" />
       <workItem from="1748532250826" duration="1565000" />
       <workItem from="1748533984585" duration="4541000" />
-      <workItem from="1748538547198" duration="8420000" />
+      <workItem from="1748538547198" duration="11309000" />
     </task>
     <servers />
   </component>

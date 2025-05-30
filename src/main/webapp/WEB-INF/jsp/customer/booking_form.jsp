@@ -49,7 +49,6 @@
 
         <div id="selectedServicesContainer" class="mb-3">
             <p><strong>Dịch vụ đã chọn:</strong></p>
-            <%-- Các dịch vụ đã chọn sẽ được thêm vào đây bằng JavaScript --%>
             <c:if test="${empty preSelectedServiceId}">
                 <small class="text-muted">Chưa chọn dịch vụ nào.</small>
             </c:if>
@@ -115,7 +114,6 @@
         const availableSlotsContainer = $('#availableSlotsContainer');
         const selectedTimeInput = $('#selectedTime');
 
-        // Pre-select service if serviceId is passed
         const preSelectedServiceId = parseInt('${preSelectedServiceId}');
         if (preSelectedServiceId && !isNaN(preSelectedServiceId)) {
             serviceSelect.val(preSelectedServiceId);
@@ -125,7 +123,9 @@
 
         $('#addServiceButton').on('click', function() {
             const selectedOption = serviceSelect.find('option:selected');
-            const serviceId = selectedOption.val();
+            const serviceIdString = selectedOption.val();
+            if (!serviceIdString) return;
+            const serviceId = parseInt(serviceIdString);
             const serviceName = selectedOption.text().split('(')[0].trim();
             const servicePrice = parseFloat(selectedOption.data('price'));
             const serviceDuration = parseInt(selectedOption.data('duration'));
@@ -133,22 +133,20 @@
             if (serviceId && !selectedServices.find(s => s.id === serviceId)) {
                 selectedServices.push({ id: serviceId, name: serviceName, price: servicePrice, duration: serviceDuration, nailArtId: null, nailArtPrice: 0 });
                 updateSelectedServicesUI();
-                updateSummary();
-                fetchAvailableSlots();
+                updateSummaryAndFetchSlots();
             }
             serviceSelect.val('');
         });
 
         selectedServicesContainer.on('click', '.remove-service-btn', function() {
-            const serviceIdToRemove = $(this).data('serviceId');
+            const serviceIdToRemove = parseInt($(this).data('serviceId'));
             selectedServices = selectedServices.filter(s => s.id !== serviceIdToRemove);
             updateSelectedServicesUI();
-            updateSummary();
-            fetchAvailableSlots();
+            updateSummaryAndFetchSlots();
         });
 
         selectedServicesContainer.on('change', '.nailart-for-service', function(){
-            const serviceId = $(this).data('serviceId');
+            const serviceId = parseInt($(this).data('serviceId'));
             const nailArtId = $(this).val() === "0" ? null : parseInt($(this).val());
             const nailArtPrice = nailArtId ? parseFloat($(this).find('option:selected').data('price')) : 0;
 
@@ -157,7 +155,7 @@
                 selectedServices[serviceIndex].nailArtId = nailArtId;
                 selectedServices[serviceIndex].nailArtPrice = nailArtPrice;
             }
-            updateSummary();
+            updateSummary(); // Chỉ cập nhật tổng tiền, không cần fetch lại slot
         });
 
         function updateSelectedServicesUI() {
@@ -170,17 +168,15 @@
                     <c:forEach var="nailArt" items="${nailArtList}">
                     <c:set var="nailArtIdForJs" value="${nailArt.nailArtId}"/>
                     <c:set var="nailArtPriceForJs" value="${nailArt.priceAddon}"/>
-                    <c:set var="nailArtNameForJs">
-                    <c:out value="${nailArt.nailArtName}" escapeXml="false"/> <%-- Tạm thời không escape để xử lý trong JS, nhưng cần cẩn thận XSS --%>
-                    </c:set>
-                    <c:set var="isSelectedCondition" value="${service.nailArtId == nailArt.nailArtId}"/> <%-- Tính toán điều kiện trước --%>
+                    <c:set var="nailArtNameForJs"><c:out value="${nailArt.nailArtName}" escapeXml="true"/></c:set>
+                    <c:set var="isSelectedCondition" value="${service.nailArtId == nailArt.nailArtId}"/>
 
                     nailArtOptions += '<option value="' + '${nailArtIdForJs}' + '" data-price="' + '${nailArtPriceForJs}' + '"';
                     <c:if test="${isSelectedCondition}">
                     nailArtOptions += ' selected';
                     </c:if>
                     nailArtOptions += '>' + '${nailArtNameForJs}'.replace(/'/g, "\\'") +
-                        ' (+<fmt:formatNumber value="${nailArtPriceForJs}" type="currency"/>)' +
+                        ' (+<fmt:formatNumber value="${nailArtPriceForJs}" type="currency" currencySymbol="₫" groupingUsed="true"/>)' +
                         '</option>';
                     </c:forEach>
 
@@ -214,6 +210,11 @@
             totalPriceSpan.text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice));
         }
 
+        function updateSummaryAndFetchSlots(){
+            updateSummary();
+            fetchAvailableSlots();
+        }
+
         selectedDateInput.on('change', fetchAvailableSlots);
         staffIdSelect.on('change', fetchAvailableSlots);
 
@@ -231,7 +232,6 @@
             availableSlotsContainer.html('<small class="text-muted w-100">Đang tải giờ trống...</small>');
             selectedTimeInput.val('');
 
-
             $.ajax({
                 url: '${pageContext.request.contextPath}/customer/book-appointment/get-available-slots',
                 type: 'GET',
@@ -248,8 +248,8 @@
                         response.slots.forEach(function(slot) {
                             const slotButton = $('<button type="button" class="btn btn-outline-primary time-slot"></button>').text(slot);
                             slotButton.on('click', function() {
-                                $('.time-slot').removeClass('btn-primary').addClass('btn-outline-primary');
-                                $(this).removeClass('btn-outline-primary').addClass('btn-primary');
+                                $('.time-slot').removeClass('btn-primary active').addClass('btn-outline-primary');
+                                $(this).removeClass('btn-outline-primary').addClass('btn-primary active');
                                 selectedTimeInput.val(slot);
                             });
                             availableSlotsContainer.append(slotButton);

@@ -34,6 +34,7 @@ import java.util.*;
 
 @WebServlet("/customer/book-appointment/*")
 public class BookingServlet extends HttpServlet {
+    @Serial
     private static final long serialVersionUID = 1L;
     private ServiceDAO serviceDAO;
     private NailArtDAO nailArtDAO;
@@ -79,7 +80,7 @@ public class BookingServlet extends HttpServlet {
                 case "/form":
                     showBookingForm(request, response);
                     break;
-                case "/get-available-slots": // AJAX call
+                case "/get-available-slots":
                     getAvailableSlots(request, response);
                     break;
                 default:
@@ -170,7 +171,7 @@ public class BookingServlet extends HttpServlet {
         if(preSelectedServiceId != null && !preSelectedServiceId.isEmpty()){
             try{
                 request.setAttribute("preSelectedServiceId", Integer.parseInt(preSelectedServiceId));
-            } catch (NumberFormatException e) { /* Bỏ qua nếu không phải số */ }
+            } catch (NumberFormatException e) { }
         }
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/customer/booking_form.jsp");
@@ -182,7 +183,7 @@ public class BookingServlet extends HttpServlet {
 
         String[] selectedServiceIds = request.getParameterValues("selectedServiceIds");
         String selectedDateStr = request.getParameter("selectedDate");
-        String selectedTimeStr = request.getParameter("selectedTime"); // HH:mm
+        String selectedTimeStr = request.getParameter("selectedTime");
         String staffIdStr = request.getParameter("staffId");
         String customerNotes = request.getParameter("customerNotes");
 
@@ -198,7 +199,7 @@ public class BookingServlet extends HttpServlet {
         }
 
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date selectedDateTimeUtil = dateTimeFormat.parse(selectedDateStr + " " + selectedTimeStr);
+        java.util.Date selectedDateTimeUtil = dateTimeFormat.parse(selectedDateStr + " " + selectedTimeStr);
         Timestamp appointmentTimestamp = new Timestamp(selectedDateTimeUtil.getTime());
 
         if(appointmentTimestamp.before(new Timestamp(System.currentTimeMillis()))){
@@ -281,95 +282,125 @@ public class BookingServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        String dateStr = request.getParameter("date"); // yyyy-MM-dd
-        String staffIdStr = request.getParameter("staffId"); // Tùy chọn
-        // String totalDurationStr = request.getParameter("duration"); // Tổng thời gian các dịch vụ đã chọn (phút)
+        String dateStr = request.getParameter("date");
+        String staffIdStr = request.getParameter("staffId");
+        String totalDurationRequiredStr = request.getParameter("duration");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        java.sql.Date selectedDate = new java.sql.Date(sdf.parse(dateStr).getTime());
-
-        Integer staffId = null;
-        if (staffIdStr != null && !staffIdStr.isEmpty() && !staffIdStr.equals("0")) {
-            staffId = Integer.parseInt(staffIdStr);
+        if (dateStr == null || dateStr.isEmpty() || totalDurationRequiredStr == null || totalDurationRequiredStr.isEmpty()) {
+            response.getWriter().write("{\"error\":\"Vui lòng chọn ngày và dịch vụ (để tính thời gian).\"}");
+            return;
         }
 
-        List<String> availableTimeSlots = new ArrayList<>();
-        List<StaffSchedule> staffSchedules;
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date selectedUtilDate = sdfDate.parse(dateStr);
+        java.sql.Date selectedSqlDate = new java.sql.Date(selectedUtilDate.getTime());
 
-        if (staffId != null) {
-            User staffUser = userDAO.getUserById(staffId);
-            if (staffUser == null || !staffUser.isActive() || !("staff".equals(staffUser.getRole()) || "admin".equals(staffUser.getRole()) || "cashier".equals(staffUser.getRole()))) {
-                response.getWriter().write("{\"error\":\"Nhân viên không hợp lệ.\"}");
+        int totalDurationRequired = 0;
+        try {
+            totalDurationRequired = Integer.parseInt(totalDurationRequiredStr);
+            if (totalDurationRequired <= 0) {
+                response.getWriter().write("{\"error\":\"Thời gian dịch vụ không hợp lệ.\"}");
                 return;
             }
-            staffSchedules = staffScheduleDAO.getSchedulesByStaffIdAndDate(staffId, selectedDate); // Cần thêm phương thức này vào DAO
-        } else {
-            staffSchedules = staffScheduleDAO.getAvailableSchedulesByDate(selectedDate);
+        } catch (NumberFormatException e){
+            response.getWriter().write("{\"error\":\"Thời gian dịch vụ không hợp lệ (duration).\"}");
+            return;
         }
 
-        List<Appointment> existingAppointments = appointmentDAO.getAppointmentsByDate(selectedDate);
+        Integer specificStaffId = null;
+        if (staffIdStr != null && !staffIdStr.isEmpty() && !staffIdStr.equals("0")) {
+            specificStaffId = Integer.parseInt(staffIdStr);
+        }
 
-        // Logic tính toán slot trống rất phức tạp, đây là ví dụ đơn giản hóa
-        // Cần xem xét: giờ làm việc, các lịch hẹn đã có, thời gian nghỉ giữa các ca, thời gian dịch vụ
-        // Giả sử mỗi slot cách nhau 30 phút và chỉ kiểm tra lịch làm việc của nhân viên (nếu được chọn)
+        List<StaffSchedule> candidateSchedules;
+        List<String> excludedStatuses = Arrays.asList("cancelled_by_customer", "cancelled_by_staff", "no_show");
+        List<Appointment> allAppointmentsForDay = appointmentDAO.getAppointmentsByDateAndStatusNotIn(selectedSqlDate, excludedStatuses);
 
-        Map<Integer, List<TimeRange>> staffBookedSlots = new HashMap<>();
-        for (Appointment app : existingAppointments) {
-            if (app.getStaffId() != null) {
-                staffBookedSlots.computeIfAbsent(app.getStaffId(), k -> new ArrayList<>())
-                        .add(new TimeRange(app.getAppointmentDatetime(), app.getEstimatedDurationMinutes()));
+
+        if (specificStaffId != null) {
+            User staffUser = userDAO.getUserById(specificStaffId);
+            if (staffUser == null || !staffUser.isActive() || !("staff".equals(staffUser.getRole()) || "admin".equals(staffUser.getRole()) || "cashier".equals(staffUser.getRole()))) {
+                response.getWriter().write("{\"error\":\"Nhân viên không hợp lệ hoặc không hoạt động.\"}");
+                return;
             }
+            candidateSchedules = staffScheduleDAO.getSchedulesByStaffIdAndDate(specificStaffId, selectedSqlDate);
+        } else {
+            candidateSchedules = staffScheduleDAO.getAvailableSchedulesByDate(selectedSqlDate);
         }
 
-        for (StaffSchedule schedule : staffSchedules) {
+        Set<String> availableTimeSlots = new TreeSet<>();
+        int slotIntervalMinutes = 15;
+        int bookingBufferHours = 1;
+
+        Calendar now = Calendar.getInstance();
+        Calendar minBookingTimeCal = Calendar.getInstance();
+        minBookingTimeCal.add(Calendar.HOUR_OF_DAY, bookingBufferHours);
+
+
+        for (StaffSchedule schedule : candidateSchedules) {
             if (!schedule.isAvailable()) continue;
 
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(schedule.getStartTime());
-            Time slotTime = new Time(cal.getTimeInMillis());
+            List<TimeRange> staffBookedTimeRanges = new ArrayList<>();
+            for(Appointment app : allAppointmentsForDay) {
+                if(app.getStaffId() != null && app.getStaffId().equals(schedule.getStaffId())) {
+                    staffBookedTimeRanges.add(new TimeRange(app.getAppointmentDatetime(), app.getEstimatedDurationMinutes()));
+                }
+            }
 
-            while (slotTime.before(schedule.getEndTime())) {
-                boolean isBooked = false;
-                List<TimeRange> bookedRanges = staffBookedSlots.get(schedule.getStaffId());
-                if(bookedRanges != null){
-                    for(TimeRange booked : bookedRanges){
-                        if(booked.overlaps(slotTime, 30)){ // Giả sử thời gian dịch vụ tối thiểu là 30p
-                            isBooked = true;
-                            break;
-                        }
+            Calendar currentSlotStartCal = Calendar.getInstance();
+            currentSlotStartCal.setTime(schedule.getWorkDate());
+
+            Calendar scheduleStartTimeHelper = Calendar.getInstance();
+            scheduleStartTimeHelper.setTime(schedule.getStartTime());
+            currentSlotStartCal.set(Calendar.HOUR_OF_DAY, scheduleStartTimeHelper.get(Calendar.HOUR_OF_DAY));
+            currentSlotStartCal.set(Calendar.MINUTE, scheduleStartTimeHelper.get(Calendar.MINUTE));
+            currentSlotStartCal.set(Calendar.SECOND, 0);
+            currentSlotStartCal.set(Calendar.MILLISECOND, 0);
+
+            Calendar scheduleEndTimeHelper = Calendar.getInstance();
+            scheduleEndTimeHelper.setTime(schedule.getEndTime());
+
+            Calendar currentSlotEndPotentialCal = Calendar.getInstance();
+
+            while (true) {
+                currentSlotEndPotentialCal.setTime(currentSlotStartCal.getTime());
+                currentSlotEndPotentialCal.add(Calendar.MINUTE, totalDurationRequired);
+
+                if (currentSlotEndPotentialCal.get(Calendar.HOUR_OF_DAY) > scheduleEndTimeHelper.get(Calendar.HOUR_OF_DAY) ||
+                        (currentSlotEndPotentialCal.get(Calendar.HOUR_OF_DAY) == scheduleEndTimeHelper.get(Calendar.HOUR_OF_DAY) &&
+                                currentSlotEndPotentialCal.get(Calendar.MINUTE) > scheduleEndTimeHelper.get(Calendar.MINUTE)) ) {
+                    break;
+                }
+
+                if (currentSlotStartCal.before(minBookingTimeCal)) {
+                    currentSlotStartCal.add(Calendar.MINUTE, slotIntervalMinutes);
+                    continue;
+                }
+
+                boolean isOverlapping = false;
+                Timestamp currentSlotStartTS = new Timestamp(currentSlotStartCal.getTimeInMillis());
+                Timestamp currentSlotEndPotentialTS = new Timestamp(currentSlotEndPotentialCal.getTimeInMillis());
+
+                for (TimeRange bookedRange : staffBookedTimeRanges) {
+                    if (bookedRange.isOverlappingWith(currentSlotStartTS, currentSlotEndPotentialTS)) {
+                        isOverlapping = true;
+                        break;
                     }
                 }
 
-                if(!isBooked){
-                    // Chỉ thêm slot nếu nó nằm trong tương lai gần (vd: sau 1 tiếng kể từ bây giờ)
-                    Calendar slotCalCheck = Calendar.getInstance();
-                    slotCalCheck.setTime(selectedDate);
-                    String[] timeParts = new SimpleDateFormat("HH:mm").format(slotTime).split(":");
-                    slotCalCheck.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeParts[0]));
-                    slotCalCheck.set(Calendar.MINUTE, Integer.parseInt(timeParts[1]));
-
-                    Calendar nowPlusBuffer = Calendar.getInstance();
-                    nowPlusBuffer.add(Calendar.HOUR_OF_DAY, 1); // Buffer 1 tiếng
-
-                    if(slotCalCheck.after(nowPlusBuffer)){
-                        availableTimeSlots.add(new SimpleDateFormat("HH:mm").format(slotTime));
-                    }
+                if (!isOverlapping) {
+                    availableTimeSlots.add(new SimpleDateFormat("HH:mm").format(currentSlotStartTS));
                 }
-                cal.add(Calendar.MINUTE, 30); // Bước nhảy slot
-                slotTime.setTime(cal.getTimeInMillis());
+
+                currentSlotStartCal.add(Calendar.MINUTE, slotIntervalMinutes);
             }
         }
 
-        // Loại bỏ trùng lặp và sắp xếp (nếu cần từ nhiều nhân viên)
-        List<String> uniqueSortedSlots = new ArrayList<>(new HashSet<>(availableTimeSlots));
-        java.util.Collections.sort(uniqueSortedSlots);
-
-
-        // Chuyển thành JSON (cần thư viện JSON như Gson hoặc Jackson, hoặc tự build chuỗi JSON đơn giản)
         StringBuilder jsonResponse = new StringBuilder("{\"slots\":[");
-        for (int i = 0; i < uniqueSortedSlots.size(); i++) {
-            jsonResponse.append("\"").append(uniqueSortedSlots.get(i)).append("\"");
-            if (i < uniqueSortedSlots.size() - 1) {
+        List<String> slotsList = new ArrayList<>(availableTimeSlots);
+        for (int i = 0; i < slotsList.size(); i++) {
+            jsonResponse.append("\"").append(slotsList.get(i)).append("\"");
+            if (i < slotsList.size() - 1) {
                 jsonResponse.append(",");
             }
         }
@@ -377,7 +408,6 @@ public class BookingServlet extends HttpServlet {
         response.getWriter().write(jsonResponse.toString());
     }
 
-    // Lớp tiện ích nội bộ để biểu diễn khoảng thời gian
     private static class TimeRange {
         Timestamp start;
         Timestamp end;
@@ -389,22 +419,8 @@ public class BookingServlet extends HttpServlet {
             cal.add(Calendar.MINUTE, durationMinutes);
             this.end = new Timestamp(cal.getTimeInMillis());
         }
-        // Kiểm tra xem một slot (slotStartTime với duration) có chồng lấn với khoảng này không
-        boolean overlaps(Time slotStartTime, int slotDurationMinutes) {
-            Calendar slotStartCal = Calendar.getInstance();
-            slotStartCal.setTime(this.start); // Lấy ngày từ this.start
-            String[] timeParts = new SimpleDateFormat("HH:mm").format(slotStartTime).split(":");
-            slotStartCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeParts[0]));
-            slotStartCal.set(Calendar.MINUTE, Integer.parseInt(timeParts[1]));
-            slotStartCal.set(Calendar.SECOND, 0);
-            slotStartCal.set(Calendar.MILLISECOND, 0);
 
-            Timestamp slotStartTimestamp = new Timestamp(slotStartCal.getTimeInMillis());
-
-            Calendar slotEndCal = (Calendar) slotStartCal.clone();
-            slotEndCal.add(Calendar.MINUTE, slotDurationMinutes);
-            Timestamp slotEndTimestamp = new Timestamp(slotEndCal.getTimeInMillis());
-
+        boolean isOverlappingWith(Timestamp slotStartTimestamp, Timestamp slotEndTimestamp) {
             return slotStartTimestamp.before(this.end) && slotEndTimestamp.after(this.start);
         }
     }

@@ -12,9 +12,12 @@ import java.sql.Date;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class AppointmentDAO {
 
@@ -428,5 +431,67 @@ public class AppointmentDAO {
         appointment.setCreatedAt(rs.getTimestamp("created_at"));
         appointment.setUpdatedAt(rs.getTimestamp("updated_at"));
         return appointment;
+    }
+
+    public BigDecimal getTotalRevenueByDateRange(Date startDate, Date endDate) throws SQLException {
+        String sql = "SELECT SUM(final_amount) as total_revenue FROM appointments " +
+                "WHERE status = 'completed' AND DATE(appointment_datetime) BETWEEN ? AND ?";
+        BigDecimal totalRevenue = BigDecimal.ZERO;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setDate(1, startDate);
+            ps.setDate(2, endDate);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                BigDecimal revenue = rs.getBigDecimal("total_revenue");
+                if (revenue != null) {
+                    totalRevenue = revenue;
+                }
+            }
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closeStatement(ps);
+            DBUtil.closeConnection(conn);
+        }
+        return totalRevenue;
+    }
+
+    public Map<String, BigDecimal> getDailyRevenueForMonth(int year, int month) throws SQLException {
+        // Trả về Map với key là ngày (String "yyyy-MM-dd") và value là doanh thu ngày đó
+        // Sử dụng LinkedHashMap để giữ thứ tự ngày
+        Map<String, BigDecimal> dailyRevenue = new LinkedHashMap<>();
+        String sql = "SELECT DATE(appointment_datetime) as appointment_day, SUM(final_amount) as daily_revenue " +
+                "FROM appointments " +
+                "WHERE status = 'completed' AND YEAR(appointment_datetime) = ? AND MONTH(appointment_datetime) = ? " +
+                "GROUP BY DATE(appointment_datetime) " +
+                "ORDER BY appointment_day ASC";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, month);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String day = rs.getString("appointment_day");
+                BigDecimal revenue = rs.getBigDecimal("daily_revenue");
+                dailyRevenue.put(day, revenue != null ? revenue : BigDecimal.ZERO);
+            }
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closeStatement(ps);
+            DBUtil.closeConnection(conn);
+        }
+        return dailyRevenue;
     }
 }

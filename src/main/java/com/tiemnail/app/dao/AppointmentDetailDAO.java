@@ -6,6 +6,9 @@ import com.tiemnail.app.util.DBUtil;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class AppointmentDetailDAO {
 
@@ -181,6 +184,34 @@ public class AppointmentDetailDAO {
             }
         }
         return rowsAffected > 0;
+    }
+
+    public Map<Integer, Integer> getServiceUsageCounts() throws SQLException {
+        Map<Integer, Integer> serviceCounts = new LinkedHashMap<>();
+        String sql = "SELECT ad.service_id, COUNT(ad.service_id) as usage_count " +
+                "FROM appointment_details ad " +
+                "JOIN appointments a ON ad.appointment_id = a.appointment_id " +
+                "WHERE a.status = 'completed' " +
+                "GROUP BY ad.service_id " +
+                "ORDER BY usage_count DESC";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                serviceCounts.put(rs.getInt("service_id"), rs.getInt("usage_count"));
+            }
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closeStatement(ps);
+            DBUtil.closeConnection(conn);
+        }
+        return serviceCounts;
     }
 
     private AppointmentDetail mapResultSetToAppointmentDetail(ResultSet rs) throws SQLException {
