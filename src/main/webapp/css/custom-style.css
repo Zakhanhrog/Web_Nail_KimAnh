@@ -1,0 +1,169 @@
+/* Reset và Base Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font chữ hiện đại */
+    color: #333;
+    line-height: 1.6;
+}
+
+a {
+    color: #d9534f; /* Màu chủ đạo của tiệm nail - ví dụ màu đỏ hồng */
+    transition: color 0.3s ease;
+}
+a:hover {
+    color: #c9302c;
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300; /* Font mỏng hơn cho tiêu đề */
+    color: #2c3e50; /* Màu xám đậm cho tiêu đề */
+}
+.section-title {
+    font-weight: 600; /* Đậm hơn cho tiêu đề section */
+    color: #34495e; /* Một màu khác cho tiêu đề section */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 15px;
+}
+.section-title::after { /* Đường gạch chân trang trí */
+    content: '';
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #d9534f; /* Màu chủ đạo */
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+/* Navbar */
+.navbar.bg-dark {
+    background-color: #343a40 !important; /* Màu nền tối hơn */
+    /* Hoặc một màu pastel nhẹ nhàng nếu tiệm của bạn theo phong cách đó */
+    /* background-color: #f8c291 !important; */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.navbar-dark .navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #fff; /* Hoặc màu tối nếu nền navbar sáng */
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,0.75);
+    padding: 0.8rem 1rem;
+    transition: color 0.3s ease;
+}
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-item.active .nav-link {
+    color: #fff;
+}
+
+
+/* Hero Section */
+.hero-section {
+    /* Sử dụng ảnh banner chất lượng cao, liên quan đến nail/spa */
+    /* background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('your-banner-image.jpg') no-repeat center center; */
+    background-color: #e9ecef; /* Fallback color */
+    padding: 120px 0; /* Tăng padding */
+}
+.hero-section h1 {
+    font-size: 3.8rem;
+    color: #fff; /* Hoặc màu tối nếu nền hero sáng */
+    animation: fadeInDown 1s; /* Hiệu ứng đơn giản */
+}
+.hero-section p {
+    font-size: 1.3rem;
+    color: rgba(255,255,255,0.9);
+    animation: fadeInUp 1s 0.5s;
+}
+.hero-section .btn {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border-radius: 50px; /* Bo tròn nút */
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 1s 1s;
+}
+.hero-section .btn-primary {
+    background-color: #d9534f;
+    border-color: #d9534f;
+}
+.hero-section .btn-primary:hover {
+    background-color: #c9302c;
+    border-color: #c9302c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.hero-section .btn-outline-light:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255,255,255,0.2);
+}
+
+
+/* Cards (Dịch vụ, Mẫu Nail) */
+.card {
+    border: none; /* Bỏ border mặc định của card */
+    border-radius: 10px; /* Bo góc card nhiều hơn */
+    overflow: hidden; /* Đảm bảo ảnh không tràn ra ngoài khi bo góc */
+}
+.card-title {
+    color: #333;
+    font-weight: 600;
+}
+.card-footer {
+    background-color: #fff;
+    border-top: 1px solid #eee;
+}
+
+
+/* Testimonials */
+.testimonial-section {
+}
+.testimonial-item p {
+    font-style: italic;
+    color: #555;
+}
+.testimonial-item h5 {
+    color: #d9534f;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Call to Action Section */
+.cta-section {
+    /* background-color: #f8c291;  Màu pastel khác */
+    /* color: #333; */
+}
+.cta-section h3 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+.cta-section .btn-warning {
+    background-color: #f0ad4e; /* Màu vàng cam cho CTA */
+    border-color: #f0ad4e;
+    color: #fff;
+}
+.cta-section .btn-warning:hover {
+    background-color: #ec971f;
+    border-color: #ec971f;
+}
+
+/* Footer */
+footer.bg-light {
+    background-color: #e9ecef !important; /* Màu nền sáng hơn cho footer */
+    padding: 30px 0;
+}
+
+/* Keyframes cho animation (ví dụ) */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
