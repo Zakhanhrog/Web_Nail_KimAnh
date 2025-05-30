@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import com.tiemnail.app.dto.StaffPerformanceDTO;
 
 public class AppointmentDAO {
 
@@ -493,5 +494,50 @@ public class AppointmentDAO {
             DBUtil.closeConnection(conn);
         }
         return dailyRevenue;
+    }
+
+    public List<StaffPerformanceDTO> getStaffPerformanceByDateRange(Date startDate, Date endDate) throws SQLException {
+        List<StaffPerformanceDTO> performanceList = new ArrayList<>();
+        String sql = "SELECT " +
+                "    u.user_id as staff_id, " +
+                "    u.full_name as staff_name, " +
+                "    COUNT(a.appointment_id) as completed_appointments, " +
+                "    COALESCE(SUM(a.final_amount), 0) as total_revenue, " +
+                "    s.average_rating " + // Lấy từ bảng staff (đã được cập nhật bởi ReviewServlet)
+                "FROM users u " +
+                "JOIN staff s ON u.user_id = s.staff_id " +
+                "LEFT JOIN appointments a ON u.user_id = a.staff_id " +
+                "    AND a.status = 'completed' " +
+                "    AND DATE(a.appointment_datetime) BETWEEN ? AND ? " +
+                "WHERE u.role IN ('staff', 'admin', 'cashier') AND u.is_active = TRUE " + // Chỉ lấy nhân viên active
+                "GROUP BY u.user_id, u.full_name, s.average_rating " +
+                "ORDER BY total_revenue DESC, completed_appointments DESC, u.full_name ASC";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setDate(1, startDate);
+            ps.setDate(2, endDate);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                StaffPerformanceDTO dto = new StaffPerformanceDTO();
+                dto.setStaffId(rs.getInt("staff_id"));
+                dto.setStaffName(rs.getString("staff_name"));
+                dto.setCompletedAppointments(rs.getInt("completed_appointments"));
+                dto.setTotalRevenue(rs.getBigDecimal("total_revenue"));
+                dto.setAverageRating(rs.getBigDecimal("average_rating")); // average_rating từ bảng staff
+                performanceList.add(dto);
+            }
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closeStatement(ps);
+            DBUtil.closeConnection(conn);
+        }
+        return performanceList;
     }
 }

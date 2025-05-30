@@ -2,6 +2,7 @@ package com.tiemnail.app.dao;
 
 import com.tiemnail.app.model.Customer;
 import com.tiemnail.app.util.DBUtil;
+import com.tiemnail.app.dto.CustomerLoyaltyDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -130,5 +131,62 @@ public class CustomerDAO {
         customer.setTotalVisits(rs.getInt("total_visits"));
         customer.setTotalSpent(rs.getBigDecimal("total_spent"));
         return customer;
+    }
+
+    public List<CustomerLoyaltyDTO> getLoyalCustomers(int limit, String orderBy) throws SQLException {
+        // orderBy can be "total_visits" or "total_spent"
+        List<CustomerLoyaltyDTO> loyalCustomers = new ArrayList<>();
+        String orderByClause = "c.total_visits DESC, c.total_spent DESC";
+        if ("total_spent".equalsIgnoreCase(orderBy)) {
+            orderByClause = "c.total_spent DESC, c.total_visits DESC";
+        } else if ("total_visits".equalsIgnoreCase(orderBy)) {
+            orderByClause = "c.total_visits DESC, c.total_spent DESC";
+        }
+        String sql = "SELECT " +
+                "    u.user_id as customer_id, " +
+                "    u.full_name as customer_name, " +
+                "    u.email as customer_email, " +
+                "    u.phone_number as customer_phone, " +
+                "    COUNT(a.appointment_id) as calculated_total_visits, " +
+                "    COALESCE(SUM(a.final_amount), 0) as calculated_total_spent " +
+                "FROM users u " +
+                "LEFT JOIN appointments a ON u.user_id = a.customer_id AND a.status = 'completed' " +
+                "WHERE u.role = 'customer' AND u.is_active = TRUE " +
+                "GROUP BY u.user_id, u.full_name, u.email, u.phone_number ";
+
+        if ("total_spent".equalsIgnoreCase(orderBy)) {
+            sql += "ORDER BY calculated_total_spent DESC, calculated_total_visits DESC ";
+        } else { // Mặc định hoặc total_visits
+            sql += "ORDER BY calculated_total_visits DESC, calculated_total_spent DESC ";
+        }
+        sql += "LIMIT ?";
+
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, limit > 0 ? limit : 10); // Mặc định top 10 nếu limit không hợp lệ
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CustomerLoyaltyDTO dto = new CustomerLoyaltyDTO();
+                dto.setCustomerId(rs.getInt("customer_id"));
+                dto.setCustomerName(rs.getString("customer_name"));
+                dto.setCustomerEmail(rs.getString("customer_email"));
+                dto.setCustomerPhone(rs.getString("customer_phone"));
+                dto.setTotalVisits(rs.getLong("calculated_total_visits")); // Lấy từ cột tính toán
+                dto.setTotalSpent(rs.getBigDecimal("calculated_total_spent")); // Lấy từ cột tính toán
+                loyalCustomers.add(dto);
+            }
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closeStatement(ps);
+            DBUtil.closeConnection(conn);
+        }
+        return loyalCustomers;
     }
 }

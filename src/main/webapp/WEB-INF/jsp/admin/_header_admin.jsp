@@ -5,6 +5,7 @@
     <div class="dropdown-menu" aria-labelledby="reportsDropdown">
         <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/reports/revenue">Doanh Thu</a>
         <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/reports/popular-services">Dịch Vụ Phổ Biến</a>
-        <%-- Thêm các link báo cáo khác ở đây --%>
+        <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/reports/staff-performance">Hiệu Suất Nhân Viên</a>
+        <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/reports/loyal-customers">Khách Hàng Trung Thành</a>
     </div>
 </li>

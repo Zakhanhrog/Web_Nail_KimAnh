@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: var(--primary-color);"> <%-- Sử dụng biến CSS cho màu nền --%>
   <div class="container">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/">Tiệm Nail XYZ</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,38 +9,46 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item ${pageContext.request.requestURI.endsWith('/') || pageContext.request.requestURI.endsWith('/index.jsp') ? 'active' : ''}">
-          <a class="nav-link" href="${pageContext.request.contextPath}/">Trang Chủ</a>
+        <li class="nav-item <c:if test="${pageContext.request.requestURI.endsWith('/') || pageContext.request.requestURI.endsWith('/index.jsp') || empty pageContext.request.servletPath}">active</c:if>">
+          <a class="nav-link" href="${pageContext.request.contextPath}/">Trang Chủ
+            <c:if test="${pageContext.request.requestURI.endsWith('/') || pageContext.request.requestURI.endsWith('/index.jsp') || empty pageContext.request.servletPath}"><span class="sr-only">(current)</span></c:if>
+          </a>
         </li>
-        <li class="nav-item ${pageContext.request.requestURI.contains('/services') ? 'active' : ''}">
+        <li class="nav-item <c:if test="${pageContext.request.requestURI.contains('/services')}">active</c:if>">
           <a class="nav-link" href="${pageContext.request.contextPath}/services">Dịch Vụ</a>
         </li>
-        <li class="nav-item ${pageContext.request.requestURI.contains('/nail-arts') ? 'active' : ''}">
+        <li class="nav-item <c:if test="${pageContext.request.requestURI.contains('/nail-arts')}">active</c:if>">
           <a class="nav-link" href="${pageContext.request.contextPath}/nail-arts">Mẫu Nail</a>
         </li>
+        <li class="nav-item <c:if test="${pageContext.request.requestURI.contains('/customer/book-appointment')}">active</c:if>">
+          <a class="nav-link" href="${pageContext.request.contextPath}/customer/book-appointment">Đặt Lịch</a>
+        </li>
+
         <c:choose>
           <c:when test="${not empty sessionScope.loggedInUser}">
+            <li class="nav-item <c:if test="${pageContext.request.requestURI.contains('/customer/my-appointments')}">active</c:if>">
+              <a class="nav-link" href="${pageContext.request.contextPath}/customer/my-appointments">Lịch Hẹn Của Tôi</a>
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Chào, <c:out value="${sessionScope.loggedInUser.fullName}"/>
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownUser">
-                <a class="dropdown-item" href="#">Hồ sơ của tôi</a> <%-- Link đến trang profile --%>
-                <a class="dropdown-item" href="#">Lịch hẹn của tôi</a> <%-- Link đến lịch sử đặt lịch --%>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownUser">
+                <a class="dropdown-item" href="#">Hồ Sơ Của Tôi</a>
                 <div class="dropdown-divider"></div>
                 <c:if test="${sessionScope.loggedInUser.role == 'admin' || sessionScope.loggedInUser.role == 'staff' || sessionScope.loggedInUser.role == 'cashier'}">
                   <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/dashboard">Trang Quản Trị</a>
                   <div class="dropdown-divider"></div>
                 </c:if>
-                <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a>
+                <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng Xuất</a>
               </div>
             </li>
           </c:when>
           <c:otherwise>
-            <li class="nav-item ${pageContext.request.requestURI.contains('/login') ? 'active' : ''}">
+            <li class="nav-item <c:if test="${pageContext.request.requestURI.contains('/login')}">active</c:if>">
               <a class="nav-link" href="${pageContext.request.contextPath}/login">Đăng Nhập</a>
             </li>
-            <li class="nav-item ${pageContext.request.requestURI.contains('/register') ? 'active' : ''}">
+            <li class="nav-item <c:if test="${pageContext.request.requestURI.contains('/register')}">active</c:if>">
               <a class="nav-link" href="${pageContext.request.contextPath}/register">Đăng Ký</a>
             </li>
           </c:otherwise>
@@ -48,4 +57,4 @@
     </div>
   </div>
 </nav>
-<div style="padding-top: 56px;"></div> <%-- Padding để nội dung không bị che bởi fixed navbar --%>
+<div style="padding-top: 70px;"></div> <%-- Tăng padding top một chút cho navbar cao hơn --%>
