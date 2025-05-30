@@ -34,7 +34,7 @@ public class CustomerServiceServlet extends HttpServlet {
             if (categoryFilter != null && !categoryFilter.isEmpty()) {
                 listService = serviceDAO.getServicesByCategory(categoryFilter, true); // Chỉ lấy active services
             } else {
-                listService = serviceDAO.getAllServices(true); // Chỉ lấy active services
+                listService = serviceDAO.getAllServices(true);
             }
 
             request.setAttribute("listService", listService);
@@ -42,7 +42,6 @@ public class CustomerServiceServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/customer/service_catalog.jsp");
             dispatcher.forward(request, response);
         } catch (SQLException ex) {
-            // Log lỗi và có thể hiển thị trang lỗi thân thiện hơn
             ex.printStackTrace();
             throw new ServletException("Lỗi truy cập cơ sở dữ liệu khi lấy danh sách dịch vụ.", ex);
         }

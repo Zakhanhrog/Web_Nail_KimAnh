@@ -16,7 +16,6 @@ public class AdminDashboardServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        // Thêm kiểm tra role admin/staff ở đây nếu cần
         request.getRequestDispatcher("/WEB-INF/jsp/admin/dashboard.jsp").forward(request, response);
     }
 }
