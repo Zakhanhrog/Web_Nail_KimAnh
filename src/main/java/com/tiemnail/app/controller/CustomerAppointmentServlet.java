@@ -5,12 +5,8 @@ import com.tiemnail.app.dao.AppointmentDetailDAO;
 import com.tiemnail.app.dao.ServiceDAO;
 import com.tiemnail.app.dao.NailArtDAO;
 import com.tiemnail.app.dao.UserDAO;
-import com.tiemnail.app.model.Appointment;
-import com.tiemnail.app.model.AppointmentDetail;
-import com.tiemnail.app.model.User;
-import com.tiemnail.app.model.Service;
-import com.tiemnail.app.model.NailArt;
-
+import com.tiemnail.app.dao.ReviewDAO;
+import com.tiemnail.app.model.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,9 +18,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Calendar;
-
+import java.util.Map;
 
 @WebServlet("/customer/my-appointments/*")
 public class CustomerAppointmentServlet extends HttpServlet {
@@ -34,6 +31,7 @@ public class CustomerAppointmentServlet extends HttpServlet {
     private UserDAO userDAO;
     private ServiceDAO serviceDAO;
     private NailArtDAO nailArtDAO;
+    private ReviewDAO reviewDAO;
 
     public void init() {
         appointmentDAO = new AppointmentDAO();
@@ -41,6 +39,7 @@ public class CustomerAppointmentServlet extends HttpServlet {
         userDAO = new UserDAO();
         serviceDAO = new ServiceDAO();
         nailArtDAO = new NailArtDAO();
+        reviewDAO = new ReviewDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -84,16 +83,28 @@ public class CustomerAppointmentServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Hiện tại chưa có hành động POST cụ thể cho khách hàng ở đây
+        doGet(request, response);
     }
-
 
     private void listMyAppointmentHistory(HttpServletRequest request, HttpServletResponse response, User customer)
             throws SQLException, IOException, ServletException {
         List<Appointment> myAppointments = appointmentDAO.getAppointmentsByCustomerId(customer.getUserId());
+        Map<Integer, Review> reviewsMap = new HashMap<>(); // Map<appointmentId, ReviewObject>
+
+        if (myAppointments != null) {
+            for (Appointment app : myAppointments) {
+                if ("completed".equals(app.getStatus())) {
+                    Review review = reviewDAO.getReviewByAppointmentId(app.getAppointmentId());
+                    if (review != null) {
+                        reviewsMap.put(app.getAppointmentId(), review);
+                    }
+                }
+            }
+        }
 
         request.setAttribute("myAppointments", myAppointments);
-        request.setAttribute("userDAO", userDAO); // Để lấy tên nhân viên nếu cần
+        request.setAttribute("reviewsMap", reviewsMap);
+        request.setAttribute("userDAO", userDAO);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/customer/my_appointment_list.jsp");
         dispatcher.forward(request, response);
     }
@@ -110,7 +121,6 @@ public class CustomerAppointmentServlet extends HttpServlet {
         }
 
         List<AppointmentDetail> details = appointmentDetailDAO.getDetailsByAppointmentId(appointmentId);
-
         request.setAttribute("appointment", appointment);
         request.setAttribute("details", details);
         request.setAttribute("userDAO", userDAO);
@@ -133,12 +143,11 @@ public class CustomerAppointmentServlet extends HttpServlet {
             return;
         }
 
-        // Logic kiểm tra xem có được phép hủy không (ví dụ: trước 24h, trạng thái phù hợp)
         boolean canCancel = false;
         if ("pending_confirmation".equals(appointment.getStatus()) || "confirmed".equals(appointment.getStatus())) {
             Timestamp appointmentTime = appointment.getAppointmentDatetime();
             Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.HOUR_OF_DAY, 24); // Ví dụ: cho phép hủy trước 24 tiếng
+            cal.add(Calendar.HOUR_OF_DAY, 24);
             Timestamp cancelDeadline = new Timestamp(cal.getTimeInMillis());
 
             if (appointmentTime.after(cancelDeadline)) {

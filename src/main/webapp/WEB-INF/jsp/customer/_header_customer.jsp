@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: var(--primary-color);"> <%-- Sử dụng biến CSS cho màu nền --%>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom">
   <div class="container">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/">Tiệm Nail XYZ</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,4 +56,4 @@
     </div>
   </div>
 </nav>
-<div style="padding-top: 70px;"></div> <%-- Tăng padding top một chút cho navbar cao hơn --%>
+<div style="padding-top: 70px;"></div>

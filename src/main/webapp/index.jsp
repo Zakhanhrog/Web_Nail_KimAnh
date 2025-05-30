@@ -1,156 +1,161 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <jsp:useBean id="serviceDAOForHome" class="com.tiemnail.app.dao.ServiceDAO" scope="application"/>
 <jsp:useBean id="nailArtDAOForHome" class="com.tiemnail.app.dao.NailArtDAO" scope="application"/>
-<c:set var="featuredServices" value="${serviceDAOForHome.getAllServices(true)}" /> <%-- Lấy tất cả dịch vụ active --%>
-<c:set var="latestNailArts" value="${nailArtDAOForHome.getAllNailArts(true)}" /> <%-- Lấy tất cả mẫu nail active --%>
-
+<c:set var="featuredServices" value="${serviceDAOForHome.getAllServices(true)}" />
+<c:set var="latestNailArts" value="${nailArtDAOForHome.getAllNailArts(true)}" />
 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiệm Nail XYZ - Chăm sóc móng chuyên nghiệp</title>
+    <title>Tiệm Nail XYZ - Nơi Nghệ Thuật Thăng Hoa Trên Từng Ngón Tay</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/custom-style.css" rel="stylesheet">
-    <style>
-        .hero-section {
-            background: url('${pageContext.request.contextPath}/images/hero-background.jpg') no-repeat center center; /* Thay bằng ảnh banner của bạn */
-            background-size: cover;
-            color: white;
-            padding: 100px 0;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-        }
-        .hero-section h1 { font-size: 3.5rem; font-weight: bold; margin-bottom: 20px; }
-        .hero-section p { font-size: 1.25rem; margin-bottom: 30px; }
-        .section-title { text-align: center; margin-bottom: 50px; font-weight: bold; color: #333; }
-        .service-card-home img, .nail-art-card-home img {
-            height: 200px;
-            object-fit: cover;
-        }
-        .service-card-home, .nail-art-card-home {
-            margin-bottom: 30px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform .2s; /* Animation on hover */
-        }
-        .service-card-home:hover, .nail-art-card-home:hover {
-            transform: scale(1.05); /* Zoom in on hover */
-        }
-        .testimonial-section { background-color: #f8f9fa; padding: 60px 0; }
-        .testimonial-item { text-align: center; }
-        .testimonial-item img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 20px; }
-        .cta-section { padding: 60px 0; background-color: #343a40; color: white; text-align: center; }
-    </style>
 </head>
 <body>
+
 <jsp:include page="/WEB-INF/jsp/customer/_header_customer.jsp" />
 
-<!-- Hero Section -->
 <section class="hero-section">
-    <div class="container">
-        <h1>Tiệm Nail XYZ</h1>
-        <p>Nơi vẻ đẹp của bạn được thăng hoa - Dịch vụ nail và mỹ phẩm hàng đầu.</p>
-        <a href="${pageContext.request.contextPath}/customer/book-appointment" class="btn btn-primary btn-lg">Đặt Lịch Ngay</a>
-        <a href="${pageContext.request.contextPath}/services" class="btn btn-outline-light btn-lg ml-2">Xem Dịch Vụ</a>
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <h1 class="hero-title">Tiệm Nail XYZ</h1>
+        <p class="hero-subtitle">Nơi mỗi thiết kế móng là một tác phẩm nghệ thuật, mang đến vẻ đẹp tinh tế và phong cách độc đáo cho bạn.</p>
+        <div class="hero-buttons">
+            <a href="${pageContext.request.contextPath}/customer/book-appointment" class="btn btn-primary-custom-filled">Đặt Lịch Ngay</a>
+            <a href="${pageContext.request.contextPath}/services" class="btn btn-outline-custom-light ml-lg-3 mt-3 mt-lg-0">Khám Phá Dịch Vụ</a>
+        </div>
     </div>
 </section>
 
-<!-- Featured Services Section -->
-<section id="services" class="py-5">
+<section id="about-us" class="section-padding">
     <div class="container">
-        <h2 class="section-title">Dịch Vụ Nổi Bật</h2>
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="about-image-wrapper">
+                    <img src="${pageContext.request.contextPath}/images/about-us-image.jpg" alt="Không gian sang trọng tại Tiệm Nail XYZ" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <p class="eyebrow-text">Chào Mừng Bạn Đến Với</p>
+                <h2 class="section-title-alt">Tiệm Nail XYZ</h2>
+                <p class="section-intro-text">Tại Tiệm Nail XYZ, chúng tôi không chỉ làm móng, chúng tôi kiến tạo vẻ đẹp và sự tự tin. Với niềm đam mê nghệ thuật và sự tận tâm trong từng chi tiết, đội ngũ chuyên viên tài năng của chúng tôi luôn sẵn sàng mang đến những trải nghiệm làm đẹp đẳng cấp.</p>
+                <p>Chúng tôi tự hào sử dụng những sản phẩm cao cấp nhất, đảm bảo an toàn tuyệt đối, trong một không gian được thiết kế thanh lịch và thư giãn, giúp bạn tận hưởng trọn vẹn khoảnh khắc chăm sóc bản thân.</p>
+                <a href="#services-showcase" class="btn btn-secondary-custom mt-4">Xem Dịch Vụ Của Chúng Tôi</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="services-showcase" class="section-padding bg-pastel-gradient">
+    <div class="container">
+        <p class="eyebrow-text text-center light">Dịch Vụ Chuyên Nghiệp</p>
+        <h2 class="section-title text-center light">Chăm Sóc Hoàn Hảo</h2>
+        <p class="section-subtitle text-center light">Từ những liệu pháp spa thư giãn đến các kỹ thuật làm móng phức tạp, chúng tôi đáp ứng mọi nhu cầu làm đẹp của bạn.</p>
         <div class="row">
-            <c:forEach var="service" items="${featuredServices}" varStatus="loop" begin="0" end="2"> <%-- Hiển thị 3 dịch vụ đầu --%>
-                <div class="col-lg-4 col-md-6">
-                    <div class="card service-card-home h-100">
-                        <c:choose>
-                            <c:when test="${not empty service.imageUrl}">
-                                <img class="card-img-top" src="${pageContext.request.contextPath}/${service.imageUrl}" alt="<c:out value='${service.serviceName}'/>">
-                            </c:when>
-                            <c:otherwise>
-                                <img class="card-img-top" src="https://via.placeholder.com/700x400?text=Service" alt="Service Image">
-                            </c:otherwise>
-                        </c:choose>
-                        <div class="card-body">
-                            <h5 class="card-title"><c:out value="${service.serviceName}"/></h5>
-                            <p class="card-text"><small><c:out value="${service.description}"/></small></p>
-                        </div>
-                        <div class="card-footer text-center">
-                            <a href="${pageContext.request.contextPath}/customer/book-appointment?serviceId=${service.serviceId}" class="btn btn-outline-primary btn-sm">Đặt Lịch</a>
+            <c:forEach var="service" items="${featuredServices}" varStatus="loop" begin="0" end="2">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="custom-card service-card h-100">
+                        <a href="${pageContext.request.contextPath}/services/detail?id=${service.serviceId}" class="card-image-link">
+                            <c:choose>
+                                <c:when test="${not empty service.imageUrl}"><img class="card-img-top" src="${pageContext.request.contextPath}/${service.imageUrl}" alt="<c:out value='${service.serviceName}'/>"></c:when>
+                                <c:otherwise><img class="card-img-top" src="https://via.placeholder.com/400x280?text=${fn:replace(service.serviceName, ' ', '+')}" alt="Dịch vụ"></c:otherwise>
+                            </c:choose>
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title flex-grow-1"><a href="${pageContext.request.contextPath}/services/detail?id=${service.serviceId}"><c:out value="${service.serviceName}"/></a></h5>
+                            <p class="card-text price"><fmt:formatNumber value="${service.price}" type="currency" currencyCode="VND" currencySymbol="₫" groupingUsed="true" minFractionDigits="0" maxFractionDigits="0"/> </p>
+                            <a href="${pageContext.request.contextPath}/customer/book-appointment?serviceId=${service.serviceId}" class="btn btn-outline-primary-custom btn-sm mt-auto">Đặt Lịch Dịch Vụ Này</a>
                         </div>
                     </div>
                 </div>
             </c:forEach>
         </div>
         <div class="text-center mt-4">
-            <a href="${pageContext.request.contextPath}/services" class="btn btn-secondary">Xem Tất Cả Dịch Vụ</a>
+            <a href="${pageContext.request.contextPath}/services" class="btn btn-cta-outline-light">Xem Tất Cả Dịch Vụ</a>
         </div>
     </div>
 </section>
 
-<!-- Latest Nail Art Section -->
-<section id="nail-art" class="py-5 bg-light">
+<section id="nailart-gallery" class="section-padding">
     <div class="container">
-        <h2 class="section-title">Mẫu Nail Mới Nhất</h2>
+        <p class="eyebrow-text text-center">Bộ Sưu Tập Độc Đáo</p>
+        <h2 class="section-title text-center">Nghệ Thuật Móng Tay</h2>
+        <p class="section-subtitle text-center">Khám phá những thiết kế móng tay thời thượng, được sáng tạo bởi những nghệ nhân tài hoa, thể hiện cá tính riêng của bạn.</p>
         <div class="row">
-            <c:forEach var="nailArt" items="${latestNailArts}" varStatus="loop" begin="0" end="2"> <%-- Hiển thị 3 mẫu nail đầu --%>
-                <div class="col-lg-4 col-md-6">
-                    <div class="card nail-art-card-home h-100">
-                        <c:choose>
-                            <c:when test="${not empty nailArt.imageUrl}">
-                                <img class="card-img-top" src="${pageContext.request.contextPath}/${nailArt.imageUrl}" alt="<c:out value='${nailArt.nailArtName}'/>">
-                            </c:when>
-                            <c:otherwise>
-                                <img class="card-img-top" src="https://via.placeholder.com/700x400?text=Nail+Art" alt="Nail Art Image">
-                            </c:otherwise>
-                        </c:choose>
-                        <div class="card-body">
-                            <h5 class="card-title"><c:out value="${nailArt.nailArtName}"/></h5>
-                            <p class="card-text"><small>Giá thêm: <fmt:formatNumber value="${nailArt.priceAddon}" type="currency" currencySymbol="₫"/></small></p>
+            <c:forEach var="nailArt" items="${latestNailArts}" varStatus="loop" begin="0" end="2">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="custom-card nailart-card h-100">
+                        <a href="${pageContext.request.contextPath}/nail-arts/detail?id=${nailArt.nailArtId}" class="card-image-link">
+                            <c:choose>
+                                <c:when test="${not empty nailArt.imageUrl}"><img class="card-img-top" src="${pageContext.request.contextPath}/${nailArt.imageUrl}" alt="<c:out value='${nailArt.nailArtName}'/>"></c:when>
+                                <c:otherwise><img class="card-img-top" src="https://via.placeholder.com/400x400?text=${fn:replace(nailArt.nailArtName, ' ', '+')}" alt="Mẫu Nail"></c:otherwise>
+                            </c:choose>
+                        </a>
+                        <div class="card-body text-center">
+                            <h5 class="card-title"><a href="${pageContext.request.contextPath}/nail-arts/detail?id=${nailArt.nailArtId}"><c:out value="${nailArt.nailArtName}"/></a></h5>
                         </div>
                     </div>
                 </div>
             </c:forEach>
         </div>
         <div class="text-center mt-4">
-            <a href="${pageContext.request.contextPath}/nail-arts" class="btn btn-secondary">Xem Thêm Mẫu Nail</a>
+            <a href="${pageContext.request.contextPath}/nail-arts" class="btn btn-secondary-custom">Xem Thêm Mẫu Nail</a>
         </div>
     </div>
 </section>
 
-<!-- Testimonials Section (Ví dụ) -->
-<section class="testimonial-section">
+<section class="testimonial-section section-padding bg-soft-cream">
     <div class="container">
-        <h2 class="section-title">Khách Hàng Nói Gì Về Chúng Tôi</h2>
-        <div class="row">
-            <div class="col-md-4 testimonial-item">
-                <img src="${pageContext.request.contextPath}/images/customer-1.jpg" alt="Customer 1"> <%-- Ảnh khách hàng mẫu --%>
-                <p>"Dịch vụ tuyệt vời, nhân viên thân thiện. Móng tay của tôi chưa bao giờ đẹp hơn thế!"</p>
-                <h5>- Chị An -</h5>
+        <p class="eyebrow-text text-center">Chia Sẻ Từ Khách Hàng</p>
+        <h2 class="section-title text-center">Trải Nghiệm Tuyệt Vời</h2>
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="testimonial-item">
+                    <div class="testimonial-avatar-wrap">
+                        <img src="${pageContext.request.contextPath}/images/customer-avatar-1.png" alt="Chị Lan Anh" class="testimonial-avatar">
+                    </div>
+                    <p class="quote">“Dịch vụ trên cả tuyệt vời! Móng tay tôi được chăm sóc tỉ mỉ và mẫu vẽ rất tinh xảo. Chắc chắn sẽ giới thiệu cho bạn bè.”</p>
+                    <h5 class="customer-name">- Lan Anh -</h5>
+                    <p class="customer-title">Khách hàng thân thiết</p>
+                </div>
             </div>
-            <div class="col-md-4 testimonial-item">
-                <img src="${pageContext.request.contextPath}/images/customer-2.jpg" alt="Customer 2">
-                <p>"Không gian tiệm rất thư giãn và sạch sẽ. Tôi chắc chắn sẽ quay lại."</p>
-                <h5>- Chị Bình -</h5>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="testimonial-item">
+                    <div class="testimonial-avatar-wrap">
+                        <img src="${pageContext.request.contextPath}/images/customer-avatar-2.png" alt="Chị Minh Thư" class="testimonial-avatar">
+                    </div>
+                    <p class="quote">“Không gian tiệm cực kỳ thư giãn và nhân viên rất chuyên nghiệp, thân thiện. Tôi cảm thấy như được nuông chiều bản thân.”</p>
+                    <h5 class="customer-name">- Minh Thư -</h5>
+                    <p class="customer-title">Doanh nhân</p>
+                </div>
             </div>
-            <div class="col-md-4 testimonial-item">
-                <img src="${pageContext.request.contextPath}/images/customer-3.jpg" alt="Customer 3">
-                <p>"Các mẫu nail art ở đây rất độc đáo và cập nhật xu hướng. Rất hài lòng!"</p>
-                <h5>- Chị Chi -</h5>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="testimonial-item">
+                    <div class="testimonial-avatar-wrap">
+                        <img src="${pageContext.request.contextPath}/images/customer-avatar-3.png" alt="Bạn Ngọc Bích" class="testimonial-avatar">
+                    </div>
+                    <p class="quote">“Yêu thích các mẫu nail art ở đây, luôn cập nhật xu hướng mới nhất. Giá cả cũng rất hợp lý cho chất lượng dịch vụ.”</p>
+                    <h5 class="customer-name">- Ngọc Bích -</h5>
+                    <p class="customer-title">Fashionista</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Call to Action Section -->
-<section class="cta-section">
-    <div class="container">
-        <h3>Sẵn Sàng Để Có Bộ Móng Ưng Ý?</h3>
-        <p>Đội ngũ chuyên gia của chúng tôi luôn sẵn lòng phục vụ bạn.</p>
-        <a href="${pageContext.request.contextPath}/customer/book-appointment" class="btn btn-warning btn-lg">Đặt Lịch Ngay Hôm Nay</a>
+<section class="cta-section section-padding">
+    <div class="container cta-container">
+        <h3 class="cta-title">Sẵn Sàng Cho Vẻ Đẹp Hoàn Hảo?</h3>
+        <p class="cta-subtitle">Hãy để Tiệm Nail XYZ đồng hành cùng bạn trên hành trình khám phá và tôn vinh nét đẹp riêng. Đặt lịch hẹn ngay hôm nay để trải nghiệm dịch vụ đẳng cấp!</p>
+        <a href="${pageContext.request.contextPath}/customer/book-appointment" class="btn btn-primary-custom-filled btn-lg shadow-lg">Đặt Lịch Hẹn Ngay</a>
     </div>
 </section>
 

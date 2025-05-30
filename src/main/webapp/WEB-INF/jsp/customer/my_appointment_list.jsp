@@ -90,7 +90,8 @@
                             </c:if>
                         </c:if>
                         <c:if test="${app.status == 'completed'}">
-                            <c:set var="existingReview" value="<%= new com.tiemnail.app.dao.ReviewDAO().getReviewByAppointmentId( ((com.tiemnail.app.model.Appointment)pageContext.getAttribute("app")).getAppointmentId() ) %>" />
+                            <%-- Lấy review từ map đã được chuẩn bị ở Servlet --%>
+                            <c:set var="existingReview" value="${reviewsMap[app.appointmentId]}" />
                             <c:if test="${empty existingReview}">
                                 <a href="${pageContext.request.contextPath}/customer/review/new?appointmentId=${app.appointmentId}" class="btn btn-warning btn-sm mt-1">Đánh Giá</a>
                             </c:if>
