@@ -206,10 +206,10 @@
             Đối Tác Thương Hiệu Cao Cấp Của Chúng Tôi
         </h5>
         <div class="d-flex justify-content-around align-items-center flex-wrap">
-            <img src="${pageContext.request.contextPath}/images/logo-brand-1.png" alt="Brand 1" style="height: 50px; margin: 15px 20px; filter: grayscale(80%); opacity: 0.7; transition: var(--transition-fast);">
-            <img src="${pageContext.request.contextPath}/images/logo-brand-2.png" alt="Brand 2" style="height: 50px; margin: 15px 20px; filter: grayscale(80%); opacity: 0.7; transition: var(--transition-fast);">
-            <img src="${pageContext.request.contextPath}/images/logo-brand-3.png" alt="Brand 3" style="height: 50px; margin: 15px 20px; filter: grayscale(80%); opacity: 0.7; transition: var(--transition-fast);">
-            <img src="${pageContext.request.contextPath}/images/logo-brand-4.png" alt="Brand 4" style="height: 50px; margin: 15px 20px; filter: grayscale(80%); opacity: 0.7; transition: var(--transition-fast);">
+            <img src="${pageContext.request.contextPath}/images/logo-brand-1.png" alt="Brand 1" style="height: 100px; margin: 15px 20px; filter: grayscale(80%); opacity: 0.7; transition: var(--transition-fast);">
+            <img src="${pageContext.request.contextPath}/images/logo-brand-2.png" alt="Brand 2" style="height: 100px; margin: 15px 20px; filter: grayscale(80%); opacity: 0.7; transition: var(--transition-fast);">
+            <img src="${pageContext.request.contextPath}/images/logo-brand-3.png" alt="Brand 3" style="height: 100px; margin: 15px 20px; filter: grayscale(80%); opacity: 0.7; transition: var(--transition-fast);">
+            <img src="${pageContext.request.contextPath}/images/logo-brand-4.png" alt="Brand 4" style="height: 100px; margin: 15px 20px; filter: grayscale(80%); opacity: 0.7; transition: var(--transition-fast);">
         </div>
     </div>
 </section>

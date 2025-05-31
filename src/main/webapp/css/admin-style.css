@@ -1,159 +1,297 @@
-/* src/main/webapp/css/admin-style.css */
-
-body {
-    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font dễ đọc cho admin */
-    background-color: #f4f7f6; /* Màu nền xám nhạt cho toàn trang admin */
-    color: #333;
-    font-size: 0.95rem;
+:root {
+    --primary-pink-main: #F8BBD0;
+    --secondary-pink-accent: #F48FB1;
+    --background-main: #FFF9FB;
+    --text-primary-dark: #424242;
+    --text-secondary-gray: #616161;
+    --text-navbar-default: #6A1B9A; /* Màu chữ navbar mặc định - Tím đậm */
+    --text-navbar-hover-active: #FFFFFF; /* Màu chữ navbar khi hover/active - Trắng */
+    --border-soft: #FCE4EC;
+    --border-input-default: #E1BEE7;
+    --focus-ring-color: rgba(244, 143, 177, 0.35);
+    --white-pure: #FFFFFF;
+    --shadow-soft: 0 2px 5px rgba(0,0,0,0.05);
+    --shadow-medium: 0 4px 10px rgba(0,0,0,0.08);
+    --border-radius-std: 0.3rem;
+    --transition-default: 0.2s ease-in-out;
 }
 
-.admin-container { /* Class bọc nội dung chính của các trang admin */
+body {
+    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-main);
+    color: var(--text-primary-dark);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.admin-container {
     padding-top: 20px;
     padding-bottom: 40px;
 }
 
-/* --- Navbar Admin --- */
-.admin-navbar { /* Class mới cho navbar admin, hoặc bạn có thể style .navbar trực tiếp nếu chỉ dùng 1 layout admin */
-    background-color: #343a40; /* Màu tối cho navbar admin */
-    border-bottom: 3px solid #007bff; /* Đường viền màu xanh làm điểm nhấn */
+.admin-navbar {
+    background-color: var(--primary-pink-main);
+    border-bottom: 3px solid var(--secondary-pink-accent);
+    box-shadow: var(--shadow-medium);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
 }
 .admin-navbar .navbar-brand {
     font-weight: bold;
-    color: #fff;
+    color: var(--text-navbar-default);
+    font-size: 1.4rem;
 }
 .admin-navbar .nav-link {
-    color: rgba(255,255,255,0.75);
+    color: var(--text-navbar-default);
+    font-weight: 500;
+    opacity: 1;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-std);
+    transition: background-color var(--transition-default), color var(--transition-default), opacity var(--transition-default);
 }
 .admin-navbar .nav-link:hover,
 .admin-navbar .nav-item.active .nav-link {
-    color: #fff;
+    color: var(--text-navbar-hover-active);
+    opacity: 1;
+    background-color: var(--secondary-pink-accent);
 }
 .admin-navbar .dropdown-menu {
-    background-color: #343a40;
-    border-color: #454d55;
+    background-color: var(--primary-pink-main);
+    border: 1px solid var(--secondary-pink-accent);
+    box-shadow: var(--shadow-medium);
+    margin-top: 0.5rem;
 }
 .admin-navbar .dropdown-item {
-    color: rgba(255,255,255,0.75);
+    color: var(--text-navbar-default);
+    font-weight: 500;
+    opacity: 1;
+    transition: background-color var(--transition-default), color var(--transition-default), opacity var(--transition-default);
 }
 .admin-navbar .dropdown-item:hover,
 .admin-navbar .dropdown-item:focus {
-    color: #fff;
-    background-color: #007bff;
+    color: var(--text-navbar-hover-active);
+    opacity: 1;
+    background-color: var(--secondary-pink-accent);
 }
 
-
-/* --- Tiêu đề trang Admin --- */
 .admin-page-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 500;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    color: #2c3e50;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-soft);
+    color: var(--secondary-pink-accent);
+    letter-spacing: -0.5px;
 }
 
-/* --- Bảng dữ liệu Admin --- */
-.table th { /* Style cho header của bảng */
-    background-color: #e9ecef; /* Màu nền xám nhạt cho header */
-    color: #495057;
+.table {
+    border: 1px solid var(--border-soft);
+    border-radius: var(--border-radius-std);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    background-color: var(--white-pure);
+}
+.table th {
+    background-color: #FEF5F7;
+    color: var(--secondary-pink-accent);
     font-weight: 600;
     vertical-align: middle !important;
-    border-bottom-width: 2px;
+    border-bottom: 2px solid var(--primary-pink-main) !important;
+    border-top: 0;
+    padding: 0.9rem 0.75rem;
+    text-align: left;
 }
 .table td {
     vertical-align: middle !important;
+    border-color: var(--border-soft);
+    padding: 0.8rem 0.75rem;
+    color: var(--text-secondary-gray);
+}
+.table-hover tbody tr {
+    transition: background-color var(--transition-default);
 }
 .table-hover tbody tr:hover {
-    background-color: #f8f9fa;
+    background-color: #FFF7F9;
 }
-.table .badge { /* Style cho các badge trạng thái */
+.table .badge {
     font-size: 0.85em;
-    padding: .4em .6em;
+    padding: .4em .7em;
+    font-weight: 500;
+    border-radius: var(--border-radius-std);
+}
+.badge-pink-status {
+    background-color: var(--primary-pink-main);
+    color: var(--text-on-pink-bg); /* Sử dụng biến đã có nếu muốn đồng bộ, hoặc để trắng */
 }
 .table .action-buttons a,
 .table .action-buttons button {
-    margin-right: 5px;
-    margin-bottom: 5px; /* Cho responsive */
+    margin-right: 6px;
+    margin-bottom: 6px;
+    padding: 0.35rem 0.7rem;
 }
 
-
-/* --- Form Admin --- */
 .admin-form .card {
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-medium);
+    border-radius: var(--border-radius-std);
+    background-color: var(--white-pure);
 }
 .admin-form .card-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #ddd;
-    font-size: 1.2rem;
+    background-color: #FEF5F7;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 1.25rem;
     font-weight: 500;
+    color: var(--secondary-pink-accent);
+    padding: 0.9rem 1.25rem;
+}
+.admin-form .card-body {
+    padding: 1.5rem;
 }
 .admin-form .form-group label {
     font-weight: 500;
-    color: #495057;
+    color: var(--text-primary-dark);
+    margin-bottom: 0.6rem;
 }
 .admin-form .form-control,
 .admin-form .custom-select {
-    border-radius: 0.25rem;
-    border: 1px solid #ced4da;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    border-radius: var(--border-radius-std);
+    border: 1px solid var(--border-input-default);
+    box-shadow: var(--shadow-soft);
+    padding: 0.6rem 0.85rem;
+    transition: border-color var(--transition-default), box-shadow var(--transition-default);
 }
 .admin-form .form-control:focus,
 .admin-form .custom-select:focus {
-    border-color: #80bdff;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    border-color: var(--secondary-pink-accent);
+    box-shadow: 0 0 0 0.2rem var(--focus-ring-color);
 }
-.admin-form .btn { /* Nút trong form */
+.admin-form .btn {
     margin-right: 10px;
+    padding: 0.6rem 1.2rem;
 }
 .admin-form .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: var(--secondary-pink-accent);
+    border-color: var(--secondary-pink-accent);
+    color: var(--white-pure);
+}
+.admin-form .btn-primary:hover {
+    background-color: var(--primary-pink-main);
+    border-color: var(--primary-pink-main);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 .admin-form .btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background-color: #f8f9fa;
+    border-color: #d1d1d1;
+    color: var(--text-secondary-gray);
 }
-
-
-/* --- Nút bấm chung --- */
-.btn {
-    border-radius: 0.25rem;
-    padding: .5rem 1rem;
-    font-size: 0.9rem;
-}
-.btn-success { background-color: #28a745; border-color: #28a745; }
-.btn-danger { background-color: #dc3545; border-color: #dc3545; }
-.btn-warning { background-color: #ffc107; border-color: #ffc107; color: #212529; }
-.btn-info { background-color: #17a2b8; border-color: #17a2b8; }
-
-
-/* --- Footer Admin --- */
-.admin-footer { /* Class cho footer admin */
+.admin-form .btn-secondary:hover {
     background-color: #e9ecef;
-    color: #6c757d;
-    padding: 20px 0;
-    font-size: 0.85rem;
-    border-top: 1px solid #dee2e6;
+    border-color: #c0c0c0;
+}
+
+.btn {
+    border-radius: var(--border-radius-std);
+    padding: .55rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color var(--transition-default), border-color var(--transition-default), transform var(--transition-default), box-shadow var(--transition-default);
+    letter-spacing: 0.3px;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+.btn:active {
+    transform: translateY(0px);
+    box-shadow: var(--shadow-soft);
+}
+
+.btn-primary {
+    background-color: var(--secondary-pink-accent);
+    border-color: var(--secondary-pink-accent);
+    color: var(--white-pure);
+}
+.btn-primary:hover {
+    background-color: var(--primary-pink-main);
+    border-color: var(--primary-pink-main);
+}
+
+.btn-success { background-color: #A5D6A7; border-color: #A5D6A7; color: var(--text-primary-dark); }
+.btn-success:hover { background-color: #90C693; border-color: #90C693; }
+
+.btn-danger { background-color: #EF9A9A; border-color: #EF9A9A; color: var(--text-primary-dark); }
+.btn-danger:hover { background-color: #E88383; border-color: #E88383; }
+
+.btn-warning { background-color: #FFE082; border-color: #FFE082; color: var(--text-primary-dark); }
+.btn-warning:hover { background-color: #FFD56B; border-color: #FFD56B; }
+
+.btn-info { background-color: #90CAF9; border-color: #90CAF9; color: var(--text-primary-dark); }
+.btn-info:hover { background-color: #79B9F7; border-color: #79B9F7; }
+
+.admin-footer {
+    background-color: #FEF5F7;
+    color: var(--text-secondary-gray);
+    padding: 25px 0;
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border-soft);
+    text-align: center;
 }
 .admin-footer a {
-    color: #007bff;
+    color: var(--secondary-pink-accent);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition-default);
 }
 .admin-footer a:hover {
-    color: #0056b3;
+    color: var(--primary-pink-main);
+    text-decoration: underline;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .admin-page-title {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
     .admin-form .btn {
         display: block;
         width: 100%;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
+        margin-right: 0;
     }
     .admin-form .btn:last-child {
         margin-bottom: 0;
+    }
+    .table thead {
+        display: none;
+    }
+    .table, .table tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+    }
+    .table tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--border-soft);
+        border-radius: var(--border-radius-std);
+    }
+    .table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border-bottom: 1px solid var(--border-soft);
+    }
+    .table td:last-child {
+        border-bottom: 0;
+    }
+    .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0.75rem;
+        width: calc(50% - 1.5rem);
+        padding-right: 0.75rem;
+        font-weight: bold;
+        text-align: left;
+        color: var(--text-primary-dark);
     }
 }

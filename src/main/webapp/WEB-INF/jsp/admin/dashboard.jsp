@@ -8,35 +8,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Admin Dashboard - KimiBeauty</title>
   <jsp:include page="_header_admin.jsp" />
-  <style>
-    .dashboard-card {
-      margin-bottom: 20px;
-      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075) !important;
-    }
-    .dashboard-card .card-body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 120px;
-    }
-    .dashboard-card .card-title {
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: #555;
-    }
-    .dashboard-card .card-text {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #007bff;
-    }
-    .quick-links .list-group-item {
-      font-size: 1rem;
-    }
-    .quick-links .list-group-item:hover {
-      background-color: #f8f9fa;
-    }
-  </style>
+    <style>
+        .admin-container {
+        padding: 20px;
+        }
+        .admin-page-title {
+        font-family: var(--font-heading);
+        color: var(--text-darkest);
+        margin-bottom: 20px;
+        }
+        .dashboard-card {
+        margin-bottom: 20px;
+        border-radius: var(--border-radius-medium);
+        }
+        .dashboard-card .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        }
+        .dashboard-card .card-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        }
+        .admin-form {
+        margin-top: 20px;
+        }
+        .quick-links a {
+        text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid admin-container">

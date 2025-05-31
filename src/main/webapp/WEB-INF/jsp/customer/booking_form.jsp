@@ -21,6 +21,11 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
         </c:if>
+        <c:if test="${not empty submittedServiceIdsForDebug}">
+            <div class="alert alert-info booking-alert" role="alert">
+                DEBUG: Submitted Service IDs: <c:out value="${submittedServiceIdsForDebug}"/>
+            </div>
+        </c:if>
 
         <form id="bookingForm" action="${pageContext.request.contextPath}/customer/book-appointment/submit" method="post">
             <div class="booking-form-section">
@@ -49,13 +54,12 @@
                     </c:if>
                 </div>
 
-                <%-- KHỐI CHỌN NAIL ART MỚI --%>
-                <div id="nailArtSelectionBlock" class="form-group mt-3" style="display: none;"> <%-- Mặc định ẩn, hiện khi có dịch vụ --%>
+                <div id="nailArtSelectionBlock" class="form-group mt-3" style="display: none;">
                     <label for="globalNailArtSelect" class="form-label-custom">Chọn thêm mẫu Nail Art (tùy chọn):</label>
                     <select id="globalNailArtSelect" name="selectedGlobalNailArtId" class="custom-select custom-form-control">
                         <option value="0" data-price="0">-- Không chọn mẫu nail --</option>
                         <c:forEach var="nailArt" items="${nailArtList}">
-                             <option value="${nailArt.nailArtId}" data-price="${nailArt.priceAddon}">
+                            <option value="${nailArt.nailArtId}" data-price="${nailArt.priceAddon}">
                                 <c:out value="${nailArt.nailArtName}"/> (+<fmt:formatNumber value="${nailArt.priceAddon}" type="currency" currencySymbol="₫" pattern="#,##0 ₫"/>)
                             </option>
                         </c:forEach>
@@ -63,7 +67,7 @@
                 </div>
 
 
-                <div class="booking-summary-text mt-3"> <%-- Thêm mt-3 nếu khối Nail Art hiển thị --%>
+                <div class="booking-summary-text mt-3">
                     <p><strong class="summary-label">Tổng thời gian dự kiến:</strong> <span id="totalDuration" class="summary-value">0</span> phút</p>
                     <p><strong class="summary-label">Tổng tiền dịch vụ (tạm tính):</strong> <span id="totalPrice" class="summary-value total-price-value">0 ₫</span></p>
                 </div>
@@ -118,12 +122,10 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Không cần window.nailArtDataForJs nữa nếu dropdown nail art là tĩnh
-
         let selectedServices = [];
         let totalDuration = 0;
         let totalPrice = 0;
-        let globalNailArtPrice = 0; // Biến lưu giá của nail art chung đã chọn
+        let globalNailArtPrice = 0;
 
         const serviceSelect = $('#serviceSelect');
         const selectedServicesContainer = $('#selectedServicesContainer');
@@ -149,11 +151,19 @@
         }
 
         $('#addServiceButton').on('click', function() {
+            console.log("Add service button clicked.");
             const selectedOption = serviceSelect.find('option:selected');
             const serviceIdString = selectedOption.val();
-            if (!serviceIdString) return;
+            console.log("Selected option value (serviceIdString):", serviceIdString, typeof serviceIdString);
+
+            if (!serviceIdString) {
+                console.log("serviceIdString is empty, returning.");
+                return;
+            }
 
             const serviceId = parseInt(serviceIdString);
+            console.log("Parsed serviceId:", serviceId, typeof serviceId);
+
             let fullOptionText = selectedOption.text();
             let serviceName = fullOptionText;
             const indexOfDetails = fullOptionText.indexOf(" (");
@@ -169,42 +179,73 @@
             }
             const servicePrice = parseFloat(selectedOption.data('price'));
             const serviceDuration = parseInt(selectedOption.data('duration'));
+            console.log("Parsed service details: Name:", serviceName, "Price:", servicePrice, "Duration:", serviceDuration);
 
-            if (serviceId && serviceName && serviceName.length > 0 && !isNaN(servicePrice) && !isNaN(serviceDuration)) {
+            if (serviceId && !isNaN(serviceId) && serviceName && serviceName.length > 0 && !isNaN(servicePrice) && !isNaN(serviceDuration)) {
                 if (!selectedServices.find(s => s.id === serviceId)) {
-                    selectedServices.push({
+                    const serviceToAdd = {
                         id: serviceId,
                         name: serviceName,
                         price: servicePrice,
                         duration: serviceDuration
-                        // Không cần nailArtId, nailArtPrice cho từng service nữa
-                    });
+                    };
+                    console.log("Service to add:", JSON.parse(JSON.stringify(serviceToAdd)));
+                    selectedServices.push(serviceToAdd);
+                    console.log("selectedServices AFTER push:", JSON.parse(JSON.stringify(selectedServices)));
                     updateSelectedServicesUI();
                     updateSummaryAndFetchSlots();
                 } else {
                     alert("Dịch vụ này đã được thêm vào danh sách.");
+                    console.log("Service ID", serviceId, "already in selectedServices.");
                 }
             } else {
-                alert("Không thể thêm dịch vụ. Vui lòng thử lại hoặc chọn dịch vụ khác.");
+                console.error("Failed to add service due to invalid data. Parsed values:", {serviceId, serviceName, servicePrice, serviceDuration});
+                alert("Không thể thêm dịch vụ. Dữ liệu không hợp lệ từ lựa chọn. Vui lòng thử lại hoặc chọn dịch vụ khác.");
             }
             serviceSelect.val('');
         });
 
         selectedServicesContainer.on('click', '.remove-service-btn', function() {
-            const serviceIdToRemove = parseInt($(this).data('serviceId'));
-            selectedServices = selectedServices.filter(s => s.id !== serviceIdToRemove);
+            console.log("Remove button clicked. Element:", this);
+            const rawServiceId = $(this).data('serviceId');
+            console.log("Raw data-service-id from button:", rawServiceId, typeof rawServiceId);
+
+            const serviceIdToRemove = parseInt(rawServiceId);
+            console.log("Parsed serviceIdToRemove:", serviceIdToRemove, typeof serviceIdToRemove);
+
+            console.log("selectedServices BEFORE filter:", JSON.parse(JSON.stringify(selectedServices)));
+
+            selectedServices = selectedServices.filter(s => {
+                let match = s.id === serviceIdToRemove;
+                // Sửa dòng này - dùng đối tượng để log
+                console.log({
+                    message: "Filtering decision",
+                    service_id: s.id,
+                    service_id_type: typeof s.id,
+                    serviceIdToRemove: serviceIdToRemove,
+                    serviceIdToRemove_type: typeof serviceIdToRemove,
+                    keep: !match
+                });
+                return !match;
+            });
+
+            console.log("selectedServices AFTER filter:", JSON.parse(JSON.stringify(selectedServices)));
+
             updateSelectedServicesUI();
             updateSummaryAndFetchSlots();
         });
 
         globalNailArtSelect.on('change', function() {
             globalNailArtPrice = parseFloat($(this).find('option:selected').data('price')) || 0;
-            updateSummaryAndFetchSlots(); // Cập nhật tổng tiền và có thể cả slot
+            console.log("Global Nail Art price changed to:", globalNailArtPrice);
+            updateSummaryAndFetchSlots();
         });
 
 
         function updateSelectedServicesUI() {
+            console.log("updateSelectedServicesUI called. Current selectedServices:", JSON.parse(JSON.stringify(selectedServices)));
             selectedServicesContainer.find('.service-item').remove();
+            console.log("Number of .service-item elements after .remove():", selectedServicesContainer.find('.service-item').length);
 
             const noServiceTextElement = selectedServicesContainer.find('#noServiceSelectedText');
             if (selectedServices.length === 0) {
@@ -213,27 +254,52 @@
                 } else {
                     noServiceTextElement.show();
                 }
-                nailArtSelectionBlock.hide(); // Ẩn khối chọn nail art nếu không có dịch vụ
+                nailArtSelectionBlock.hide();
             } else {
                 if (noServiceTextElement.length > 0) {
                     noServiceTextElement.hide();
                 }
-                nailArtSelectionBlock.show(); // Hiện khối chọn nail art khi có dịch vụ
+                nailArtSelectionBlock.show();
             }
 
             selectedServices.forEach(service => {
+                // Kiểm tra kỹ service.id
+                if (typeof service.id === 'undefined' || service.id === null || isNaN(service.id)) {
+                    console.error("ERROR in updateSelectedServicesUI: Service object has invalid id:", JSON.parse(JSON.stringify(service)));
+                    return; // Bỏ qua service này nếu ID không hợp lệ
+                }
                 const serviceNameText = service.name ? service.name : 'Lỗi tên dịch vụ';
-                const itemHtmlString = `
-                    <div class="service-item" data-service-id="${service.id}">
-                        <input type="hidden" name="selectedServiceIds" value="${service.id}">
-                        <span class="service-name-display"></span>
-                        <button type="button" class="btn btn-outline-danger btn-sm remove-service-btn" data-service-id="${service.id}" title="Xóa dịch vụ">×</button>
-                    </div>`;
+                const currentServiceId = service.id; // Gán vào một biến để đảm bảo
+                console.log("Processing service for UI: ID =", currentServiceId, "Name =", serviceNameText);
 
-                const newItem = $(itemHtmlString);
-                newItem.find('.service-name-display').text(serviceNameText);
-                selectedServicesContainer.append(newItem);
+                // Thay đổi cách tạo HTML, sử dụng jQuery để tạo và set attribute
+                // Điều này giúp tránh các vấn đề tiềm ẩn với template literals trong một số trường hợp phức tạp
+                const serviceItemDiv = $('<div></div>')
+                    .addClass('service-item')
+                    .attr('data-service-id', currentServiceId); // Sử dụng attr()
+
+                const hiddenInput = $('<input>')
+                    .attr('type', 'hidden')
+                    .attr('name', 'selectedServiceIds')
+                    .val(currentServiceId); // Sử dụng val()
+
+                const nameSpan = $('<span></span>')
+                    .addClass('service-name-display')
+                    .text(serviceNameText);
+
+                const removeButton = $('<button></button>')
+                    .attr('type', 'button')
+                    .addClass('btn btn-outline-danger btn-sm remove-service-btn')
+                    .attr('data-service-id', currentServiceId) // Sử dụng attr()
+                    .attr('title', 'Xóa dịch vụ')
+                    .html('×'); // Ký tự 'x'
+
+                serviceItemDiv.append(hiddenInput).append(nameSpan).append(removeButton);
+                selectedServicesContainer.append(serviceItemDiv);
             });
+
+            console.log("Number of .service-item elements after re-adding:", selectedServicesContainer.find('.service-item').length);
+            console.log("Final HTML of selectedServicesContainer:", selectedServicesContainer.html().replace(/\s+/g, ' ').trim()); // Log HTML gọn hơn
         }
 
         function updateSummary() {
@@ -247,6 +313,7 @@
             totalPrice += globalNailArtPrice;
             totalDurationSpan.text(totalDuration);
             totalPriceSpan.text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice));
+            console.log("Summary updated. Total Duration:", totalDuration, "Total Price:", totalPrice);
         }
 
         function updateSummaryAndFetchSlots(){
@@ -258,33 +325,40 @@
         staffIdSelect.on('change', fetchAvailableSlots);
 
         function fetchAvailableSlots() {
+            console.log("fetchAvailableSlots called.");
             const date = selectedDateInput.val();
             const staffId = staffIdSelect.val();
             const duration = totalDuration;
+            console.log("Params for fetchAvailableSlots: Date:", date, "Staff ID:", staffId, "Duration:", duration);
 
-            if (!date || duration === 0 && selectedServices.length === 0) { // Chỉ reset nếu ko có dịch vụ VÀ ko có ngày
+
+            if (!date || duration === 0 && selectedServices.length === 0) {
                 availableSlotsContainer.html('<small class="text-muted w-100 p-2 no-slots-text">Vui lòng chọn ngày và ít nhất một dịch vụ để xem giờ trống.</small>');
                 selectedTimeInput.val('');
-                 $('#bookingForm').find('button[type="submit"]').prop('disabled', true);
+                $('#bookingForm').find('button[type="submit"]').prop('disabled', true);
+                console.log("fetchAvailableSlots: No date or no services (duration 0), resetting slots UI.");
                 return;
             }
-             if (!date && selectedServices.length > 0) { // Nếu có dịch vụ mà chưa có ngày
+            if (!date && selectedServices.length > 0) {
                 availableSlotsContainer.html('<small class="text-muted w-100 p-2 no-slots-text">Vui lòng chọn ngày để xem giờ trống.</small>');
                 selectedTimeInput.val('');
                 $('#bookingForm').find('button[type="submit"]').prop('disabled', true);
+                console.log("fetchAvailableSlots: Services selected but no date, resetting slots UI.");
                 return;
             }
 
 
             availableSlotsContainer.html('<small class="text-muted w-100 p-2 slots-loading-text">Đang tìm giờ trống, vui lòng đợi...</small>');
             selectedTimeInput.val('');
-             $('#bookingForm').find('button[type="submit"]').prop('disabled', true);
+            $('#bookingForm').find('button[type="submit"]').prop('disabled', true);
+            console.log("fetchAvailableSlots: Fetching slots via AJAX...");
 
             $.ajax({
                 url: '${pageContext.request.contextPath}/customer/book-appointment/get-available-slots',
                 type: 'GET',
                 data: { date: date, staffId: staffId, duration: duration },
                 success: function(response) {
+                    console.log("fetchAvailableSlots AJAX success. Response:", response);
                     availableSlotsContainer.empty();
                     if (response.error) {
                         availableSlotsContainer.html(`<div class="alert alert-warning w-100 slots-message">${response.error}</div>`);
@@ -297,6 +371,7 @@
                                 $(this).removeClass('btn-outline-primary').addClass('btn-primary active');
                                 selectedTimeInput.val(slot);
                                 $('#bookingForm').find('button[type="submit"]').prop('disabled', false);
+                                console.log("Slot selected:", slot);
                             });
                             availableSlotsContainer.append(slotButton);
                         });
@@ -305,7 +380,8 @@
                         $('#bookingForm').find('button[type="submit"]').prop('disabled', true);
                     }
                 },
-                error: function() {
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("fetchAvailableSlots AJAX error. Status:", textStatus, "Error:", errorThrown, "Response:", jqXHR.responseText);
                     availableSlotsContainer.html('<div class="alert alert-danger w-100 slots-message">Lỗi khi tải giờ trống. Vui lòng thử lại hoặc liên hệ với chúng tôi.</div>');
                     $('#bookingForm').find('button[type="submit"]').prop('disabled', true);
                 }
@@ -313,19 +389,21 @@
         }
 
         $('#bookingForm').on('submit', function(e){
+            console.log("Booking form submitted. Validating...");
             if(selectedServices.length === 0){
-                 e.preventDefault();
-                 alert("Vui lòng chọn ít nhất một dịch vụ.");
-                 $('html, body').animate({
+                e.preventDefault();
+                alert("Vui lòng chọn ít nhất một dịch vụ.");
+                $('html, body').animate({
                     scrollTop: $("#serviceSelect").offset().top - 100
                 }, 500);
-                 return false;
+                console.log("Form submission prevented: No services selected.");
+                return false;
             }
             if(!selectedTimeInput.val()){
                 e.preventDefault();
                 let messageContainer = availableSlotsContainer.find('.slots-message');
                 if(messageContainer.length === 0 && availableSlotsContainer.find('.slots-loading-text').length === 0){
-                     availableSlotsContainer.append('<div class="alert alert-danger w-100 mt-2 slots-message">Vui lòng chọn một giờ hẹn.</div>');
+                    availableSlotsContainer.append('<div class="alert alert-danger w-100 mt-2 slots-message">Vui lòng chọn một giờ hẹn.</div>');
                 } else {
                     messageContainer.remove();
                     availableSlotsContainer.append('<div class="alert alert-danger w-100 mt-2 slots-message">Vui lòng chọn một giờ hẹn.</div>');
@@ -333,8 +411,10 @@
                 $('html, body').animate({
                     scrollTop: availableSlotsContainer.offset().top - 100
                 }, 500);
+                console.log("Form submission prevented: No time selected.");
                 return false;
             }
+            console.log("Form validation passed. Proceeding with submission.");
         });
     });
 </script>

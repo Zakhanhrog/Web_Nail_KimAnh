@@ -1,22 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%--
-    Header này sẽ được include ở đầu mỗi trang admin.
-    Nó cần link đến admin-style.css và các file CSS/JS chung khác.
---%>
 <head>
-    <%-- Các thẻ meta charset, viewport đã có trong từng trang con --%>
-    <%-- <title>Trang Quản Trị - KimiBeauty</title> --%> <%-- Title sẽ được set bởi trang con --%>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/css/admin-style.css" rel="stylesheet"> <%-- Link đến CSS Admin --%>
-    <%-- Thêm link Google Fonts nếu bạn dùng font khác cho admin --%>
+    <link href="${pageContext.request.contextPath}/css/admin-style.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 
-<nav class="navbar navbar-expand-lg navbar-dark admin-navbar sticky-top"> <%-- Thêm class admin-navbar và sticky-top --%>
-    <div class="container-fluid"> <%-- Container-fluid để navbar rộng hơn --%>
+<nav class="navbar navbar-expand-lg navbar-dark admin-navbar sticky-top">
+    <div class="container-fluid">
         <a class="navbar-brand" href="${pageContext.request.contextPath}/admin/dashboard">Admin Panel - KimiBeauty</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#adminNavbarResponsive" aria-controls="adminNavbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
