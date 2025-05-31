@@ -218,39 +218,59 @@ public class BookingServlet extends HttpServlet {
         BigDecimal totalAddonPrice = BigDecimal.ZERO;
         int totalDurationMinutes = 0;
 
-        for (String serviceIdStr : selectedServiceIds) {
-            int serviceId = Integer.parseInt(serviceIdStr);
-            Service service = serviceDAO.getServiceById(serviceId);
-            if (service == null || !service.isActive()) continue;
+        if (selectedServiceIds != null && selectedServiceIds.length > 0) { // Thêm kiểm tra này
+            for (String serviceIdStr : selectedServiceIds) {
+                if (serviceIdStr == null || serviceIdStr.trim().isEmpty()) { // Bỏ qua nếu serviceId rỗng
+                    continue;
+                }
+                int serviceId;
+                try {
+                    serviceId = Integer.parseInt(serviceIdStr.trim()); // Thêm trim()
+                } catch (NumberFormatException e) {
+                    System.err.println("Lỗi parse serviceId: " + serviceIdStr); // Log lỗi
+                    continue; // Bỏ qua serviceId không hợp lệ
+                }
 
-            AppointmentDetail detail = new AppointmentDetail();
-            detail.setServiceId(serviceId);
-            detail.setServicePriceAtBooking(service.getPrice());
-            detail.setQuantity(1);
+                Service service = serviceDAO.getServiceById(serviceId);
+                if (service == null || !service.isActive()) continue;
 
-            totalBasePrice = totalBasePrice.add(service.getPrice());
-            totalDurationMinutes += service.getDurationMinutes();
+                AppointmentDetail detail = new AppointmentDetail();
+                detail.setServiceId(serviceId);
+                detail.setServicePriceAtBooking(service.getPrice());
+                detail.setQuantity(1);
 
-            String nailArtIdParamName = "nailArtForService_" + serviceId;
-            String nailArtIdStr = request.getParameter(nailArtIdParamName);
-            if (nailArtIdStr != null && !nailArtIdStr.isEmpty() && !nailArtIdStr.equals("0")) {
-                int nailArtId = Integer.parseInt(nailArtIdStr);
-                NailArt nailArt = nailArtDAO.getNailArtById(nailArtId);
-                if (nailArt != null && nailArt.isActive()) {
-                    detail.setNailArtId(nailArtId);
-                    detail.setNailArtPriceAtBooking(nailArt.getPriceAddon());
-                    totalAddonPrice = totalAddonPrice.add(nailArt.getPriceAddon());
+                totalBasePrice = totalBasePrice.add(service.getPrice());
+                totalDurationMinutes += service.getDurationMinutes();
+
+                String nailArtIdParamName = "nailArtForService_" + serviceId;
+                String nailArtIdStr = request.getParameter(nailArtIdParamName);
+
+                if (nailArtIdStr != null && !nailArtIdStr.trim().isEmpty() && !nailArtIdStr.equals("0")) {
+                    int nailArtId;
+                    try {
+                        nailArtId = Integer.parseInt(nailArtIdStr.trim()); // Thêm trim()
+                        NailArt nailArt = nailArtDAO.getNailArtById(nailArtId);
+                        if (nailArt != null && nailArt.isActive()) {
+                            detail.setNailArtId(nailArtId);
+                            detail.setNailArtPriceAtBooking(nailArt.getPriceAddon());
+                            totalAddonPrice = totalAddonPrice.add(nailArt.getPriceAddon());
+                        } else {
+                            detail.setNailArtPriceAtBooking(BigDecimal.ZERO);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("Lỗi parse nailArtId cho service " + serviceId + ": " + nailArtIdStr); // Log lỗi
+                        detail.setNailArtPriceAtBooking(BigDecimal.ZERO); // Mặc định nếu parse lỗi
+                    }
                 } else {
                     detail.setNailArtPriceAtBooking(BigDecimal.ZERO);
                 }
-            } else {
-                detail.setNailArtPriceAtBooking(BigDecimal.ZERO);
+                details.add(detail);
             }
-            details.add(detail);
         }
 
+
         if (details.isEmpty()) {
-            request.setAttribute("bookingErrorMessage", "Không có dịch vụ hợp lệ nào được chọn.");
+            request.setAttribute("bookingErrorMessage", "Không có dịch vụ hợp lệ nào được chọn hoặc đã xảy ra lỗi khi xử lý dịch vụ.");
             showBookingFormOnError(request, response);
             return;
         }
