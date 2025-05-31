@@ -2,7 +2,7 @@ package com.tiemnail.app.model;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List; // Để chứa AppointmentDetail
+// Bỏ import java.util.List; nếu không dùng trực tiếp trường details trong model này nữa
 
 public class Appointment {
     private int appointmentId;
@@ -14,18 +14,20 @@ public class Appointment {
     private int estimatedDurationMinutes;
     private String status;
     private BigDecimal totalBasePrice;
-    private BigDecimal totalAddonPrice;
+    private BigDecimal totalAddonPrice; // Sẽ là giá của globalNailArtId nếu có
     private BigDecimal discountAmount;
     private BigDecimal finalAmount;
     private String customerNotes;
     private String staffNotes;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private Integer globalNailArtId; // TRƯỜNG MỚI
+
     public Appointment() {
     }
 
-    // Constructor (có thể thêm nhiều constructor khác nhau)
-    public Appointment(int appointmentId, Integer customerId, String guestName, String guestPhone, Integer staffId, Timestamp appointmentDatetime, int estimatedDurationMinutes, String status, BigDecimal totalBasePrice, BigDecimal totalAddonPrice, BigDecimal discountAmount, BigDecimal finalAmount, String customerNotes, String staffNotes, Timestamp createdAt, Timestamp updatedAt) {
+    // Constructor có thể cần cập nhật nếu bạn muốn khởi tạo globalNailArtId
+    public Appointment(int appointmentId, Integer customerId, String guestName, String guestPhone, Integer staffId, Timestamp appointmentDatetime, int estimatedDurationMinutes, String status, BigDecimal totalBasePrice, BigDecimal totalAddonPrice, Integer globalNailArtId, BigDecimal discountAmount, BigDecimal finalAmount, String customerNotes, String staffNotes, Timestamp createdAt, Timestamp updatedAt) {
         this.appointmentId = appointmentId;
         this.customerId = customerId;
         this.guestName = guestName;
@@ -36,6 +38,7 @@ public class Appointment {
         this.status = status;
         this.totalBasePrice = totalBasePrice;
         this.totalAddonPrice = totalAddonPrice;
+        this.globalNailArtId = globalNailArtId; // THÊM VÀO CONSTRUCTOR
         this.discountAmount = discountAmount;
         this.finalAmount = finalAmount;
         this.customerNotes = customerNotes;
@@ -135,7 +138,12 @@ public class Appointment {
     }
 
     public BigDecimal getFinalAmount() {
-        return finalAmount;
+        // Logic tính finalAmount nên được thực hiện ở service hoặc DAO khi set các giá trị
+        // Hoặc có một phương thức riêng để tính toán dựa trên base, addon, discount
+        if (this.totalBasePrice != null && this.totalAddonPrice != null && this.discountAmount != null) {
+            return this.totalBasePrice.add(this.totalAddonPrice).subtract(this.discountAmount);
+        }
+        return finalAmount; // Trả về giá trị đã được set nếu các thành phần kia null
     }
 
     public void setFinalAmount(BigDecimal finalAmount) {
@@ -174,31 +182,14 @@ public class Appointment {
         this.updatedAt = updatedAt;
     }
 
-    /*
-    public User getCustomer() {
-        return customer;
+    public Integer getGlobalNailArtId() { // GETTER MỚI
+        return globalNailArtId;
     }
 
-    public void setCustomer(User customer) {
-        this.customer = customer;
+    public void setGlobalNailArtId(Integer globalNailArtId) { // SETTER MỚI
+        this.globalNailArtId = globalNailArtId;
     }
 
-    public User getStaff() {
-        return staff;
-    }
-
-    public void setStaff(User staff) {
-        this.staff = staff;
-    }
-
-    public List<AppointmentDetail> getDetails() {
-        return details;
-    }
-
-    public void setDetails(List<AppointmentDetail> details) {
-        this.details = details;
-    }
-    */
 
     @Override
     public String toString() {
@@ -208,7 +199,8 @@ public class Appointment {
                 ", staffId=" + staffId +
                 ", appointmentDatetime=" + appointmentDatetime +
                 ", status='" + status + '\'' +
-                ", finalAmount=" + finalAmount +
+                ", globalNailArtId=" + globalNailArtId + // THÊM VÀO TOSTRING
+                ", finalAmount=" + getFinalAmount() + // Sửa thành getFinalAmount() để đảm bảo tính toán đúng
                 '}';
     }
 }

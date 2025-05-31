@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.sql.Time;
+// import java.sql.Time; // Không còn dùng trực tiếp
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,7 +41,7 @@ public class BookingServlet extends HttpServlet {
     private UserDAO userDAO;
     private StaffScheduleDAO staffScheduleDAO;
     private AppointmentDAO appointmentDAO;
-    private AppointmentDetailDAO appointmentDetailDAO;
+    private AppointmentDetailDAO appointmentDetailDAO; // Vẫn giữ nếu bạn dùng để lưu details
 
 
     public void init() {
@@ -114,7 +114,7 @@ public class BookingServlet extends HttpServlet {
 
         String action = request.getPathInfo();
         if (action == null) {
-            action = "/submit";
+            action = "/submit"; // Mặc định là submit nếu không có pathInfo
         }
 
         try {
@@ -141,8 +141,9 @@ public class BookingServlet extends HttpServlet {
 
     private void loadCommonDataForBookingForm(HttpServletRequest request) throws SQLException {
         List<Service> serviceList = serviceDAO.getAllServices(true);
-        List<NailArt> nailArtList = nailArtDAO.getAllNailArts(true);
+        List<NailArt> nailArtList = nailArtDAO.getAllNailArts(true); // Vẫn cần nailArtList cho dropdown chung
         List<User> staffList = userDAO.getUsersByRole("staff");
+        // Cân nhắc việc gộp các vai trò khác nếu họ thực sự có thể được chọn làm nhân viên thực hiện
         staffList.addAll(userDAO.getUsersByRole("admin"));
         staffList.addAll(userDAO.getUsersByRole("cashier"));
 
@@ -156,7 +157,9 @@ public class BookingServlet extends HttpServlet {
         try {
             loadCommonDataForBookingForm(request);
         } catch (SQLException e) {
-            throw new ServletException("Lỗi tải dữ liệu cho form đặt lịch", e);
+            // Log lỗi này kỹ hơn
+            e.printStackTrace();
+            throw new ServletException("Lỗi tải dữ liệu cho form đặt lịch khi có lỗi trước đó.", e);
         }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/customer/booking_form.jsp");
         dispatcher.forward(request, response);
@@ -171,7 +174,9 @@ public class BookingServlet extends HttpServlet {
         if(preSelectedServiceId != null && !preSelectedServiceId.isEmpty()){
             try{
                 request.setAttribute("preSelectedServiceId", Integer.parseInt(preSelectedServiceId));
-            } catch (NumberFormatException e) { }
+            } catch (NumberFormatException e) {
+                // Bỏ qua lỗi parse ở đây, không cần thiết phải throw exception
+            }
         }
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/customer/booking_form.jsp");
@@ -181,13 +186,15 @@ public class BookingServlet extends HttpServlet {
     private void processBookingSubmission(HttpServletRequest request, HttpServletResponse response, User customer)
             throws SQLException, IOException, ParseException, ServletException {
 
-        String[] selectedServiceIds = request.getParameterValues("selectedServiceIds");
+        String[] selectedServiceIdParams = request.getParameterValues("selectedServiceIds"); // Từ input ẩn name="selectedServiceIds"
+        String selectedGlobalNailArtIdStr = request.getParameter("selectedGlobalNailArtId"); // Tên của select nail art chung
+
         String selectedDateStr = request.getParameter("selectedDate");
         String selectedTimeStr = request.getParameter("selectedTime");
         String staffIdStr = request.getParameter("staffId");
         String customerNotes = request.getParameter("customerNotes");
 
-        if (selectedServiceIds == null || selectedServiceIds.length == 0) {
+        if (selectedServiceIdParams == null || selectedServiceIdParams.length == 0) {
             request.setAttribute("bookingErrorMessage", "Vui lòng chọn ít nhất một dịch vụ.");
             showBookingFormOnError(request, response);
             return;
@@ -202,7 +209,7 @@ public class BookingServlet extends HttpServlet {
         java.util.Date selectedDateTimeUtil = dateTimeFormat.parse(selectedDateStr + " " + selectedTimeStr);
         Timestamp appointmentTimestamp = new Timestamp(selectedDateTimeUtil.getTime());
 
-        if(appointmentTimestamp.before(new Timestamp(System.currentTimeMillis()))){
+        if(appointmentTimestamp.before(new Timestamp(System.currentTimeMillis()))){ // Có thể thêm buffer nhỏ
             request.setAttribute("bookingErrorMessage", "Không thể đặt lịch cho thời gian trong quá khứ.");
             showBookingFormOnError(request, response);
             return;
@@ -210,83 +217,96 @@ public class BookingServlet extends HttpServlet {
 
         Integer staffId = null;
         if (staffIdStr != null && !staffIdStr.isEmpty() && !staffIdStr.equals("0")) {
-            staffId = Integer.parseInt(staffIdStr);
+            try {
+                staffId = Integer.parseInt(staffIdStr);
+            } catch (NumberFormatException e) {
+                request.setAttribute("bookingErrorMessage", "Mã nhân viên không hợp lệ.");
+                showBookingFormOnError(request, response);
+                return;
+            }
         }
 
-        List<AppointmentDetail> details = new ArrayList<>();
-        BigDecimal totalBasePrice = BigDecimal.ZERO;
-        BigDecimal totalAddonPrice = BigDecimal.ZERO;
-        int totalDurationMinutes = 0;
-
-        if (selectedServiceIds != null && selectedServiceIds.length > 0) { // Thêm kiểm tra này
-            for (String serviceIdStr : selectedServiceIds) {
-                if (serviceIdStr == null || serviceIdStr.trim().isEmpty()) { // Bỏ qua nếu serviceId rỗng
-                    continue;
-                }
-                int serviceId;
-                try {
-                    serviceId = Integer.parseInt(serviceIdStr.trim()); // Thêm trim()
-                } catch (NumberFormatException e) {
-                    System.err.println("Lỗi parse serviceId: " + serviceIdStr); // Log lỗi
-                    continue; // Bỏ qua serviceId không hợp lệ
-                }
-
-                Service service = serviceDAO.getServiceById(serviceId);
-                if (service == null || !service.isActive()) continue;
-
-                AppointmentDetail detail = new AppointmentDetail();
-                detail.setServiceId(serviceId);
-                detail.setServicePriceAtBooking(service.getPrice());
-                detail.setQuantity(1);
-
-                totalBasePrice = totalBasePrice.add(service.getPrice());
-                totalDurationMinutes += service.getDurationMinutes();
-
-                String nailArtIdParamName = "nailArtForService_" + serviceId;
-                String nailArtIdStr = request.getParameter(nailArtIdParamName);
-
-                if (nailArtIdStr != null && !nailArtIdStr.trim().isEmpty() && !nailArtIdStr.equals("0")) {
-                    int nailArtId;
-                    try {
-                        nailArtId = Integer.parseInt(nailArtIdStr.trim()); // Thêm trim()
-                        NailArt nailArt = nailArtDAO.getNailArtById(nailArtId);
-                        if (nailArt != null && nailArt.isActive()) {
-                            detail.setNailArtId(nailArtId);
-                            detail.setNailArtPriceAtBooking(nailArt.getPriceAddon());
-                            totalAddonPrice = totalAddonPrice.add(nailArt.getPriceAddon());
-                        } else {
-                            detail.setNailArtPriceAtBooking(BigDecimal.ZERO);
-                        }
-                    } catch (NumberFormatException e) {
-                        System.err.println("Lỗi parse nailArtId cho service " + serviceId + ": " + nailArtIdStr); // Log lỗi
-                        detail.setNailArtPriceAtBooking(BigDecimal.ZERO); // Mặc định nếu parse lỗi
-                    }
-                } else {
-                    detail.setNailArtPriceAtBooking(BigDecimal.ZERO);
-                }
-                details.add(detail);
+        Integer globalNailArtId = null;
+        if (selectedGlobalNailArtIdStr != null && !selectedGlobalNailArtIdStr.isEmpty() && !selectedGlobalNailArtIdStr.equals("0")) {
+            try {
+                globalNailArtId = Integer.parseInt(selectedGlobalNailArtIdStr);
+            } catch (NumberFormatException e) {
+                request.setAttribute("bookingErrorMessage", "Mã Nail Art không hợp lệ.");
+                showBookingFormOnError(request, response);
+                return;
             }
         }
 
 
-        if (details.isEmpty()) {
-            request.setAttribute("bookingErrorMessage", "Không có dịch vụ hợp lệ nào được chọn hoặc đã xảy ra lỗi khi xử lý dịch vụ.");
+        List<AppointmentDetail> detailsList = new ArrayList<>();
+        BigDecimal totalBasePrice = BigDecimal.ZERO;
+        // totalAddonPrice sẽ được tính từ globalNailArtId
+        BigDecimal totalAddonPriceFromNailArt = BigDecimal.ZERO;
+        int totalDurationMinutes = 0;
+
+        for (String serviceIdStr : selectedServiceIdParams) {
+            if (serviceIdStr == null || serviceIdStr.trim().isEmpty()) {
+                continue;
+            }
+            int serviceId;
+            try {
+                serviceId = Integer.parseInt(serviceIdStr.trim());
+            } catch (NumberFormatException e) {
+                System.err.println("Lỗi parse serviceId trong submit: " + serviceIdStr);
+                continue;
+            }
+
+            Service service = serviceDAO.getServiceById(serviceId);
+            if (service == null || !service.isActive()) continue;
+
+            AppointmentDetail detail = new AppointmentDetail();
+            detail.setServiceId(serviceId);
+            detail.setServicePriceAtBooking(service.getPrice());
+            detail.setQuantity(1);
+            // Không set NailArtId và NailArtPriceAtBooking cho từng detail nữa
+            // Nếu bảng AppointmentDetail có cột nail_art_id, bạn có thể để nó là NULL
+            // hoặc quyết định không lưu nail art vào từng detail nữa mà chỉ lưu ở Appointment.
+            // Trong ví dụ này, giả sử AppointmentDetail không còn lưu nail_art_id riêng.
+
+            detailsList.add(detail);
+
+            totalBasePrice = totalBasePrice.add(service.getPrice());
+            totalDurationMinutes += service.getDurationMinutes();
+        }
+
+        if (detailsList.isEmpty()) {
+            request.setAttribute("bookingErrorMessage", "Không có dịch vụ hợp lệ nào được chọn.");
             showBookingFormOnError(request, response);
             return;
         }
 
+        // Tính giá cho Global Nail Art (nếu có)
+        if (globalNailArtId != null) {
+            NailArt nailArt = nailArtDAO.getNailArtById(globalNailArtId);
+            if (nailArt != null && nailArt.isActive()) {
+                totalAddonPriceFromNailArt = nailArt.getPriceAddon();
+                // Nếu nail art có thời gian riêng, bạn có thể cộng vào totalDurationMinutes ở đây
+                // totalDurationMinutes += nailArt.getDuration(); // Giả sử NailArt có thuộc tính duration
+            }
+        }
+
         Appointment appointment = new Appointment();
         appointment.setCustomerId(customer.getUserId());
+        // appointment.setGuestName(...); // Nếu bạn có form cho khách vãng lai
+        // appointment.setGuestPhone(...);
         appointment.setStaffId(staffId);
         appointment.setAppointmentDatetime(appointmentTimestamp);
-        appointment.setEstimatedDurationMinutes(totalDurationMinutes);
+        appointment.setEstimatedDurationMinutes(totalDurationMinutes); // Thời gian này chưa bao gồm nail art nếu nail art có thời gian riêng
         appointment.setStatus("pending_confirmation");
         appointment.setTotalBasePrice(totalBasePrice);
-        appointment.setTotalAddonPrice(totalAddonPrice);
-        appointment.setDiscountAmount(BigDecimal.ZERO);
+        appointment.setTotalAddonPrice(totalAddonPriceFromNailArt); // Giá của global nail art
+        appointment.setGlobalNailArtId(globalNailArtId); // Lưu ID của global nail art
+        appointment.setDiscountAmount(BigDecimal.ZERO); // Xử lý discount nếu có
+        // finalAmount sẽ được tính dựa trên base + addon - discount
         appointment.setCustomerNotes(customerNotes);
+        // appointment.setStaffNotes(...);
 
-        int newAppointmentId = appointmentDAO.addAppointment(appointment, details);
+        int newAppointmentId = appointmentDAO.addAppointment(appointment, detailsList);
 
         if (newAppointmentId > 0) {
             response.sendRedirect(request.getContextPath() + "/customer/booking-success?appointmentId=" + newAppointmentId);
@@ -305,6 +325,7 @@ public class BookingServlet extends HttpServlet {
         String dateStr = request.getParameter("date");
         String staffIdStr = request.getParameter("staffId");
         String totalDurationRequiredStr = request.getParameter("duration");
+        // String globalNailArtIdStr = request.getParameter("globalNailArtId"); // Nếu thời gian nail art ảnh hưởng slot
 
         if (dateStr == null || dateStr.isEmpty() || totalDurationRequiredStr == null || totalDurationRequiredStr.isEmpty()) {
             response.getWriter().write("{\"error\":\"Vui lòng chọn ngày và dịch vụ (để tính thời gian).\"}");
@@ -318,7 +339,8 @@ public class BookingServlet extends HttpServlet {
         int totalDurationRequired = 0;
         try {
             totalDurationRequired = Integer.parseInt(totalDurationRequiredStr);
-            if (totalDurationRequired <= 0) {
+            if (totalDurationRequired <= 0 && !request.getParameterMap().containsKey("isCheckingInitialDate")) { // Chỉ báo lỗi nếu không phải kiểm tra ngày ban đầu
+                // Nếu isCheckingInitialDate là true, có thể duration là 0 nhưng vẫn muốn lấy lịch nhân viên
                 response.getWriter().write("{\"error\":\"Thời gian dịch vụ không hợp lệ.\"}");
                 return;
             }
@@ -327,9 +349,36 @@ public class BookingServlet extends HttpServlet {
             return;
         }
 
+        // Nếu bạn muốn thời gian của NailArt ảnh hưởng đến việc tìm slot, bạn cần lấy globalNailArtId ở đây
+        // và cộng thêm thời gian của nó vào totalDurationRequired
+        /*
+        if (globalNailArtIdStr != null && !globalNailArtIdStr.isEmpty() && !globalNailArtIdStr.equals("0")) {
+            try {
+                int nailArtId = Integer.parseInt(globalNailArtIdStr);
+                NailArt nailArt = nailArtDAO.getNailArtById(nailArtId);
+                if (nailArt != null && nailArt.isActive() && nailArt.getDurationMinutes() > 0) { // Giả sử NailArt có getDurationMinutes()
+                    totalDurationRequired += nailArt.getDurationMinutes();
+                }
+            } catch (NumberFormatException e) {
+                // Bỏ qua nếu ID không hợp lệ
+            }
+        }
+        */
+        // Nếu totalDurationRequired vẫn là 0 sau khi tính cả nail art (nếu có) thì không tìm slot
+        if (totalDurationRequired <=0) {
+            response.getWriter().write("{\"error\":\"Vui lòng chọn ít nhất một dịch vụ có thời gian thực hiện.\"}");
+            return;
+        }
+
+
         Integer specificStaffId = null;
         if (staffIdStr != null && !staffIdStr.isEmpty() && !staffIdStr.equals("0")) {
-            specificStaffId = Integer.parseInt(staffIdStr);
+            try{
+                specificStaffId = Integer.parseInt(staffIdStr);
+            } catch (NumberFormatException e) {
+                response.getWriter().write("{\"error\":\"Mã nhân viên không hợp lệ.\"}");
+                return;
+            }
         }
 
         List<StaffSchedule> candidateSchedules;
@@ -354,7 +403,18 @@ public class BookingServlet extends HttpServlet {
 
         Calendar now = Calendar.getInstance();
         Calendar minBookingTimeCal = Calendar.getInstance();
-        minBookingTimeCal.add(Calendar.HOUR_OF_DAY, bookingBufferHours);
+        minBookingTimeCal.setTime(selectedUtilDate); // Bắt đầu từ ngày đã chọn
+        minBookingTimeCal.set(Calendar.HOUR_OF_DAY, 0); minBookingTimeCal.set(Calendar.MINUTE, 0); minBookingTimeCal.set(Calendar.SECOND, 0);
+
+        Calendar todayCal = Calendar.getInstance(); // Ngày hiện tại
+        boolean isToday = selectedUtilDate.getYear() == todayCal.get(Calendar.YEAR) &&
+                selectedUtilDate.getMonth() == todayCal.get(Calendar.MONTH) &&
+                selectedUtilDate.getDate() == todayCal.get(Calendar.DATE);
+
+        if (isToday) { // Nếu là ngày hôm nay, thì mới áp dụng buffer
+            minBookingTimeCal.setTime(now.getTime());
+            minBookingTimeCal.add(Calendar.HOUR_OF_DAY, bookingBufferHours);
+        }
 
 
         for (StaffSchedule schedule : candidateSchedules) {
@@ -362,7 +422,10 @@ public class BookingServlet extends HttpServlet {
 
             List<TimeRange> staffBookedTimeRanges = new ArrayList<>();
             for(Appointment app : allAppointmentsForDay) {
-                if(app.getStaffId() != null && app.getStaffId().equals(schedule.getStaffId())) {
+                // Chỉ lấy các cuộc hẹn của nhân viên đang xét (nếu specificStaffId được chọn)
+                // Hoặc nếu không chọn nhân viên cụ thể, thì lịch trống của nhân viên này không nên bị ảnh hưởng bởi lịch của nhân viên khác
+                if( (specificStaffId != null && app.getStaffId() != null && app.getStaffId().equals(schedule.getStaffId())) ||
+                        (specificStaffId == null && app.getStaffId() != null && app.getStaffId().equals(schedule.getStaffId())) ) { // Thêm điều kiện cho TH ko chọn NV cụ thể
                     staffBookedTimeRanges.add(new TimeRange(app.getAppointmentDatetime(), app.getEstimatedDurationMinutes()));
                 }
             }
@@ -392,7 +455,7 @@ public class BookingServlet extends HttpServlet {
                     break;
                 }
 
-                if (currentSlotStartCal.before(minBookingTimeCal)) {
+                if (currentSlotStartCal.before(minBookingTimeCal) && isToday) { // Chỉ áp dụng buffer cho ngày hôm nay
                     currentSlotStartCal.add(Calendar.MINUTE, slotIntervalMinutes);
                     continue;
                 }

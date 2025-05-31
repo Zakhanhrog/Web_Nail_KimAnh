@@ -72,11 +72,10 @@
       <change beforePath="$PROJECT_DIR$/../Module2_TEST/src/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/BookingServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/BookingServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/_footer_customer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/_footer_customer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/Appointment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/model/Appointment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking_form.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking_form.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/service_catalog.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/service_catalog.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/css/custom-style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/css/custom-style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../caseStudy_Mod2/.idea/caseStudy_Mod2.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -287,7 +286,7 @@
       <workItem from="1748533984585" duration="4541000" />
       <workItem from="1748538547198" duration="34415000" />
       <workItem from="1748615711494" duration="786000" />
-      <workItem from="1748616502308" duration="16329000" />
+      <workItem from="1748616502308" duration="23354000" />
     </task>
     <servers />
   </component>

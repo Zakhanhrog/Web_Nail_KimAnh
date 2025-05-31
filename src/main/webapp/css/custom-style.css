@@ -1651,3 +1651,17 @@ footer.site-footer h5.footer-title::after {
         margin-top: 5px;
     }
 }
+
+/* BOOKING FORM PAGE STYLING - Thêm hoặc sửa */
+
+#nailArtSelectionBlock {
+    /* margin-top: 20px; Đã có inline */
+    padding: 15px;
+    background-color: #fdf6f8; /* Một màu nền rất nhẹ, khác với selected-services-area */
+    border: 1px solid var(--primary-pink);
+    border-radius: var(--border-radius-medium);
+}
+
+#nailArtSelectionBlock label {
+    margin-bottom: 10px;
+}

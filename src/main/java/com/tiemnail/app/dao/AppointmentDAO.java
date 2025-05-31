@@ -3,6 +3,7 @@ package com.tiemnail.app.dao;
 import com.tiemnail.app.model.Appointment;
 import com.tiemnail.app.model.AppointmentDetail;
 import com.tiemnail.app.util.DBUtil;
+import com.tiemnail.app.dto.StaffPerformanceDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,12 +19,34 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import com.tiemnail.app.dto.StaffPerformanceDTO;
+
 
 public class AppointmentDAO {
 
+    private Appointment mapResultSetToAppointment(ResultSet rs) throws SQLException {
+        Appointment appointment = new Appointment();
+        appointment.setAppointmentId(rs.getInt("appointment_id"));
+        appointment.setCustomerId(rs.getObject("customer_id", Integer.class));
+        appointment.setGuestName(rs.getString("guest_name"));
+        appointment.setGuestPhone(rs.getString("guest_phone"));
+        appointment.setStaffId(rs.getObject("staff_id", Integer.class));
+        appointment.setAppointmentDatetime(rs.getTimestamp("appointment_datetime"));
+        appointment.setEstimatedDurationMinutes(rs.getInt("estimated_duration_minutes"));
+        appointment.setStatus(rs.getString("status"));
+        appointment.setTotalBasePrice(rs.getBigDecimal("total_base_price"));
+        appointment.setTotalAddonPrice(rs.getBigDecimal("total_addon_price"));
+        appointment.setGlobalNailArtId(rs.getObject("global_nail_art_id", Integer.class));
+        appointment.setDiscountAmount(rs.getBigDecimal("discount_amount"));
+        appointment.setFinalAmount(rs.getBigDecimal("final_amount"));
+        appointment.setCustomerNotes(rs.getString("customer_notes"));
+        appointment.setStaffNotes(rs.getString("staff_notes"));
+        appointment.setCreatedAt(rs.getTimestamp("created_at"));
+        appointment.setUpdatedAt(rs.getTimestamp("updated_at"));
+        return appointment;
+    }
+
     public Appointment getAppointmentById(int appointmentId) throws SQLException {
-        String sql = "SELECT * FROM appointments WHERE appointment_id = ?";
+        String sql = "SELECT *, global_nail_art_id FROM appointments WHERE appointment_id = ?";
         Appointment appointment = null;
         Connection conn = null;
         PreparedStatement ps = null;
@@ -47,7 +70,7 @@ public class AppointmentDAO {
     }
 
     public List<Appointment> getAllAppointments() throws SQLException {
-        String sql = "SELECT * FROM appointments ORDER BY appointment_datetime DESC";
+        String sql = "SELECT *, global_nail_art_id FROM appointments ORDER BY appointment_datetime DESC";
         List<Appointment> appointments = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -70,7 +93,7 @@ public class AppointmentDAO {
     }
 
     public List<Appointment> getAppointmentsByCustomerId(int customerId) throws SQLException {
-        String sql = "SELECT * FROM appointments WHERE customer_id = ? ORDER BY appointment_datetime DESC";
+        String sql = "SELECT *, global_nail_art_id FROM appointments WHERE customer_id = ? ORDER BY appointment_datetime DESC";
         List<Appointment> appointments = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -94,18 +117,16 @@ public class AppointmentDAO {
     }
 
     public List<Appointment> getAppointmentsByStaffId(int staffId) throws SQLException {
-        String sql = "SELECT * FROM appointments WHERE staff_id = ? ORDER BY appointment_datetime DESC";
+        String sql = "SELECT *, global_nail_art_id FROM appointments WHERE staff_id = ? ORDER BY appointment_datetime DESC";
         List<Appointment> appointments = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-
         try {
             conn = DBUtil.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, staffId);
             rs = ps.executeQuery();
-
             while (rs.next()) {
                 appointments.add(mapResultSetToAppointment(rs));
             }
@@ -118,7 +139,7 @@ public class AppointmentDAO {
     }
 
     public List<Appointment> getAppointmentsByDate(Date date) throws SQLException {
-        String sql = "SELECT * FROM appointments WHERE DATE(appointment_datetime) = ? ORDER BY appointment_datetime ASC";
+        String sql = "SELECT *, global_nail_art_id FROM appointments WHERE DATE(appointment_datetime) = ? ORDER BY appointment_datetime ASC";
         List<Appointment> appointments = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -142,7 +163,7 @@ public class AppointmentDAO {
     }
 
     public List<Appointment> getUpcomingAppointmentsByStaff(int staffId) throws SQLException {
-        String sql = "SELECT * FROM appointments WHERE staff_id = ? AND appointment_datetime >= CURDATE() AND status NOT IN ('completed', 'cancelled_by_customer', 'cancelled_by_staff', 'no_show') ORDER BY appointment_datetime ASC";
+        String sql = "SELECT *, global_nail_art_id FROM appointments WHERE staff_id = ? AND appointment_datetime >= CURDATE() AND status NOT IN ('completed', 'cancelled_by_customer', 'cancelled_by_staff', 'no_show') ORDER BY appointment_datetime ASC";
         List<Appointment> appointments = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -166,7 +187,7 @@ public class AppointmentDAO {
     }
 
     public List<Appointment> getAppointmentsByStaffIdAndDate(int staffId, Date date) throws SQLException {
-        String sql = "SELECT * FROM appointments " +
+        String sql = "SELECT *, global_nail_art_id FROM appointments " +
                 "WHERE staff_id = ? AND DATE(appointment_datetime) = ? " +
                 "AND status NOT IN ('cancelled_by_customer', 'cancelled_by_staff', 'no_show') " +
                 "ORDER BY appointment_datetime ASC";
@@ -195,10 +216,28 @@ public class AppointmentDAO {
 
     public List<Appointment> getAppointmentsByDateAndStatusNotIn(Date date, List<String> excludedStatuses) throws SQLException {
         if (excludedStatuses == null || excludedStatuses.isEmpty()) {
-            return getAppointmentsByDate(date);
+            String sql = "SELECT *, global_nail_art_id FROM appointments WHERE DATE(appointment_datetime) = ? ORDER BY appointment_datetime ASC";
+            List<Appointment> appointments = new ArrayList<>();
+            Connection conn = null;
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            try {
+                conn = DBUtil.getConnection();
+                ps = conn.prepareStatement(sql);
+                ps.setDate(1,date);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    appointments.add(mapResultSetToAppointment(rs));
+                }
+            } finally {
+                DBUtil.closeResultSet(rs);
+                DBUtil.closeStatement(ps);
+                DBUtil.closeConnection(conn);
+            }
+            return appointments;
         }
 
-        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM appointments WHERE DATE(appointment_datetime) = ? AND status NOT IN (");
+        StringBuilder sqlBuilder = new StringBuilder("SELECT *, global_nail_art_id FROM appointments WHERE DATE(appointment_datetime) = ? AND status NOT IN (");
         for (int i = 0; i < excludedStatuses.size(); i++) {
             sqlBuilder.append("?");
             if (i < excludedStatuses.size() - 1) {
@@ -232,9 +271,8 @@ public class AppointmentDAO {
         return appointments;
     }
 
-
     public int addAppointment(Appointment appointment, List<AppointmentDetail> details) throws SQLException {
-        String sqlAppointment = "INSERT INTO appointments (customer_id, guest_name, guest_phone, staff_id, appointment_datetime, estimated_duration_minutes, status, total_base_price, total_addon_price, discount_amount, customer_notes, staff_notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlAppointment = "INSERT INTO appointments (customer_id, guest_name, guest_phone, staff_id, appointment_datetime, estimated_duration_minutes, status, total_base_price, total_addon_price, global_nail_art_id, discount_amount, customer_notes, staff_notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement psAppointment = null;
         int appointmentId = -1;
@@ -261,9 +299,16 @@ public class AppointmentDAO {
             psAppointment.setString(7, appointment.getStatus());
             psAppointment.setBigDecimal(8, appointment.getTotalBasePrice());
             psAppointment.setBigDecimal(9, appointment.getTotalAddonPrice());
-            psAppointment.setBigDecimal(10, appointment.getDiscountAmount());
-            psAppointment.setString(11, appointment.getCustomerNotes());
-            psAppointment.setString(12, appointment.getStaffNotes());
+
+            if (appointment.getGlobalNailArtId() != null) {
+                psAppointment.setInt(10, appointment.getGlobalNailArtId());
+            } else {
+                psAppointment.setNull(10, Types.INTEGER);
+            }
+
+            psAppointment.setBigDecimal(11, appointment.getDiscountAmount());
+            psAppointment.setString(12, appointment.getCustomerNotes());
+            psAppointment.setString(13, appointment.getStaffNotes());
 
             int rowsAffected = psAppointment.executeUpdate();
 
@@ -271,7 +316,6 @@ public class AppointmentDAO {
                 try (ResultSet generatedKeys = psAppointment.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         appointmentId = generatedKeys.getInt(1);
-                        appointment.setAppointmentId(appointmentId);
 
                         if (details != null && !details.isEmpty()) {
                             AppointmentDetailDAO detailDAO = new AppointmentDetailDAO();
@@ -314,7 +358,7 @@ public class AppointmentDAO {
     }
 
     public boolean updateAppointment(Appointment appointment) throws SQLException {
-        String sql = "UPDATE appointments SET customer_id = ?, guest_name = ?, guest_phone = ?, staff_id = ?, appointment_datetime = ?, estimated_duration_minutes = ?, status = ?, total_base_price = ?, total_addon_price = ?, discount_amount = ?, customer_notes = ?, staff_notes = ?, updated_at = CURRENT_TIMESTAMP WHERE appointment_id = ?";
+        String sql = "UPDATE appointments SET customer_id = ?, guest_name = ?, guest_phone = ?, staff_id = ?, appointment_datetime = ?, estimated_duration_minutes = ?, status = ?, total_base_price = ?, total_addon_price = ?, global_nail_art_id = ?, discount_amount = ?, customer_notes = ?, staff_notes = ?, updated_at = CURRENT_TIMESTAMP WHERE appointment_id = ?";
         Connection conn = null;
         PreparedStatement ps = null;
         int rowsAffected = 0;
@@ -339,10 +383,17 @@ public class AppointmentDAO {
             ps.setString(7, appointment.getStatus());
             ps.setBigDecimal(8, appointment.getTotalBasePrice());
             ps.setBigDecimal(9, appointment.getTotalAddonPrice());
-            ps.setBigDecimal(10, appointment.getDiscountAmount());
-            ps.setString(11, appointment.getCustomerNotes());
-            ps.setString(12, appointment.getStaffNotes());
-            ps.setInt(13, appointment.getAppointmentId());
+
+            if (appointment.getGlobalNailArtId() != null) {
+                ps.setInt(10, appointment.getGlobalNailArtId());
+            } else {
+                ps.setNull(10, Types.INTEGER);
+            }
+
+            ps.setBigDecimal(11, appointment.getDiscountAmount());
+            ps.setString(12, appointment.getCustomerNotes());
+            ps.setString(13, appointment.getStaffNotes());
+            ps.setInt(14, appointment.getAppointmentId());
 
             rowsAffected = ps.executeUpdate();
         } finally {
@@ -413,27 +464,6 @@ public class AppointmentDAO {
         return rowsAffected > 0;
     }
 
-    private Appointment mapResultSetToAppointment(ResultSet rs) throws SQLException {
-        Appointment appointment = new Appointment();
-        appointment.setAppointmentId(rs.getInt("appointment_id"));
-        appointment.setCustomerId(rs.getObject("customer_id", Integer.class));
-        appointment.setGuestName(rs.getString("guest_name"));
-        appointment.setGuestPhone(rs.getString("guest_phone"));
-        appointment.setStaffId(rs.getObject("staff_id", Integer.class));
-        appointment.setAppointmentDatetime(rs.getTimestamp("appointment_datetime"));
-        appointment.setEstimatedDurationMinutes(rs.getInt("estimated_duration_minutes"));
-        appointment.setStatus(rs.getString("status"));
-        appointment.setTotalBasePrice(rs.getBigDecimal("total_base_price"));
-        appointment.setTotalAddonPrice(rs.getBigDecimal("total_addon_price"));
-        appointment.setDiscountAmount(rs.getBigDecimal("discount_amount"));
-        appointment.setFinalAmount(rs.getBigDecimal("final_amount"));
-        appointment.setCustomerNotes(rs.getString("customer_notes"));
-        appointment.setStaffNotes(rs.getString("staff_notes"));
-        appointment.setCreatedAt(rs.getTimestamp("created_at"));
-        appointment.setUpdatedAt(rs.getTimestamp("updated_at"));
-        return appointment;
-    }
-
     public BigDecimal getTotalRevenueByDateRange(Date startDate, Date endDate) throws SQLException {
         String sql = "SELECT SUM(final_amount) as total_revenue FROM appointments " +
                 "WHERE status = 'completed' AND DATE(appointment_datetime) BETWEEN ? AND ?";
@@ -464,8 +494,6 @@ public class AppointmentDAO {
     }
 
     public Map<String, BigDecimal> getDailyRevenueForMonth(int year, int month) throws SQLException {
-        // Trả về Map với key là ngày (String "yyyy-MM-dd") và value là doanh thu ngày đó
-        // Sử dụng LinkedHashMap để giữ thứ tự ngày
         Map<String, BigDecimal> dailyRevenue = new LinkedHashMap<>();
         String sql = "SELECT DATE(appointment_datetime) as appointment_day, SUM(final_amount) as daily_revenue " +
                 "FROM appointments " +
@@ -501,15 +529,15 @@ public class AppointmentDAO {
         String sql = "SELECT " +
                 "    u.user_id as staff_id, " +
                 "    u.full_name as staff_name, " +
-                "    COUNT(a.appointment_id) as completed_appointments, " +
+                "    COUNT(DISTINCT a.appointment_id) as completed_appointments, " + // Sử dụng DISTINCT
                 "    COALESCE(SUM(a.final_amount), 0) as total_revenue, " +
-                "    s.average_rating " + // Lấy từ bảng staff (đã được cập nhật bởi ReviewServlet)
+                "    s.average_rating " +
                 "FROM users u " +
                 "JOIN staff s ON u.user_id = s.staff_id " +
                 "LEFT JOIN appointments a ON u.user_id = a.staff_id " +
                 "    AND a.status = 'completed' " +
                 "    AND DATE(a.appointment_datetime) BETWEEN ? AND ? " +
-                "WHERE u.role IN ('staff', 'admin', 'cashier') AND u.is_active = TRUE " + // Chỉ lấy nhân viên active
+                "WHERE u.role IN ('staff', 'admin', 'cashier') AND u.is_active = TRUE " +
                 "GROUP BY u.user_id, u.full_name, s.average_rating " +
                 "ORDER BY total_revenue DESC, completed_appointments DESC, u.full_name ASC";
 
@@ -530,7 +558,7 @@ public class AppointmentDAO {
                 dto.setStaffName(rs.getString("staff_name"));
                 dto.setCompletedAppointments(rs.getInt("completed_appointments"));
                 dto.setTotalRevenue(rs.getBigDecimal("total_revenue"));
-                dto.setAverageRating(rs.getBigDecimal("average_rating")); // average_rating từ bảng staff
+                dto.setAverageRating(rs.getBigDecimal("average_rating"));
                 performanceList.add(dto);
             }
         } finally {
