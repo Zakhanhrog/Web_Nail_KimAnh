@@ -529,7 +529,7 @@ public class AppointmentDAO {
         String sql = "SELECT " +
                 "    u.user_id as staff_id, " +
                 "    u.full_name as staff_name, " +
-                "    COUNT(DISTINCT a.appointment_id) as completed_appointments, " + // Sử dụng DISTINCT
+                "    COUNT(DISTINCT a.appointment_id) as completed_appointments, " +
                 "    COALESCE(SUM(a.final_amount), 0) as total_revenue, " +
                 "    s.average_rating " +
                 "FROM users u " +

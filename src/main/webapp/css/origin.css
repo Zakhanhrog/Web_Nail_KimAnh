@@ -309,30 +309,30 @@ a:hover {
 }
 
 .navbar.navbar-custom {
-    background-color: rgba(255, 255, 255, 0.97) !important;
+    background-color: rgba(255,251,251,0.97) !important;
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
     padding-top: 1rem;
     transition: background-color 0.3s ease-in-out, padding 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-.navbar-custom .navbar-brand {
-    font-family: var(--font-heading);
-    font-size: 2.3rem;
-    color: var(--accent-pink) !important;
-    font-weight: 700;
 }
 .navbar-custom.scrolled {
     background-color: var(--white-pure) !important;
     padding-top: 0.75rem;
     box-shadow: 0 5px 20px rgba(0,0,0,0.08);
 }
+.navbar-custom .navbar-brand {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--accent-pink) !important;
+    font-weight: 700;
+}
 .navbar-custom .navbar-nav .nav-link {
     color: var(--text-dark-gray) !important;
+    font-weight: 500;
     padding: 0.7rem 1.2rem;
     text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     letter-spacing: 1px;
     position: relative;
-    font-weight: 700;
 }
 .navbar-custom .navbar-nav .nav-link::after {
     content: '';
@@ -1372,22 +1372,4 @@ footer.site-footer h5.footer-title::after {
         opacity: 1;
         transform: translateY(0);
     }
-}
-.navbar-custom .navbar-brand img#navbarLogo {
-    height: 60px;
-    width: auto;
-    display: block;
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), /* Cho hiệu ứng scale và các transform khác */
-    filter 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),    /* Cho hiệu ứng filter */
-    box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Cho hiệu ứng đổ bóng */
-}
-
-.navbar-custom .navbar-brand:hover img#navbarLogo {
-    transform: scale(1.1);
-    filter: brightness(1.05) saturate(1.1);
-    cursor: pointer;
-}
-
-.navbar-custom .navbar-brand:hover {
-    text-decoration: none;
 }

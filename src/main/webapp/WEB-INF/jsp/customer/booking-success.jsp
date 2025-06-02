@@ -11,7 +11,7 @@
   <jsp:include page="_header_customer.jsp" />
   <style>
     .success-container {
-      min-height: 60vh; /* Đảm bảo nội dung chiếm ít nhất 60% chiều cao viewport */
+      min-height: 60vh;
       display: flex;
       flex-direction: column;
       justify-content: center;

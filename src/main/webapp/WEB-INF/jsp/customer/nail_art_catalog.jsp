@@ -64,13 +64,7 @@
             <h5 class="card-title"><c:out value="${nailArt.nailArtName}"/></h5>
             <p class="card-text"><small><c:out value="${nailArt.description}"/></small></p>
             <p><strong>Giá thêm:</strong> <fmt:formatNumber value="${nailArt.priceAddon}" type="currency" currencySymbol="₫" pattern="#,##0 ₫"/></p>
-              <%-- Nút like có thể thêm sau nếu cần --%>
           </div>
-            <%--
-            <div class="card-footer text-center">
-                 Nút chọn mẫu này để đặt lịch (nếu luồng đặt lịch cho phép chọn mẫu trước)
-            </div>
-            --%>
         </div>
       </div>
     </c:forEach>
@@ -78,9 +72,5 @@
 </div>
 
 <jsp:include page="_footer_customer.jsp" />
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

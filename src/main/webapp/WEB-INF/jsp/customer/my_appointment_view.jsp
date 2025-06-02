@@ -14,15 +14,13 @@
     <title>Chi Tiết Lịch Hẹn <c:if test="${appointment != null}">#${appointment.appointmentId}</c:if> - KimiBeauty</title>
     <jsp:include page="_header_customer.jsp" />
     <style>
-        /* Các style cho status-badge đã có trong my_appointment_list.jsp hoặc custom-style.css */
-        /* Có thể thêm style riêng cho trang này nếu cần */
         .detail-section h5 {
             font-family: var(--font-heading);
-            color: var(--accent-pink); /* Màu nhấn */
+            color: var(--accent-pink);
             margin-top: 1.8rem;
             margin-bottom: 0.8rem;
             padding-bottom: 0.6rem;
-            border-bottom: 2px solid var(--primary-blue-soft); /* Đường gạch chân mềm mại */
+            border-bottom: 2px solid var(--primary-blue-soft);
             font-size: 1.3rem;
         }
         .info-block p { margin-bottom: 0.75rem; }

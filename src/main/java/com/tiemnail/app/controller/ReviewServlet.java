@@ -2,8 +2,7 @@ package com.tiemnail.app.controller;
 
 import com.tiemnail.app.dao.AppointmentDAO;
 import com.tiemnail.app.dao.ReviewDAO;
-import com.tiemnail.app.dao.UserDAO; // Để cập nhật average_rating cho staff
-import com.tiemnail.app.dao.StaffDAO; // Để cập nhật average_rating cho staff
+import com.tiemnail.app.dao.StaffDAO;
 import com.tiemnail.app.model.Appointment;
 import com.tiemnail.app.model.Review;
 import com.tiemnail.app.model.User;
@@ -26,7 +25,7 @@ public class ReviewServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ReviewDAO reviewDAO;
     private AppointmentDAO appointmentDAO;
-    private StaffDAO staffDAO; // Sử dụng StaffDAO để cập nhật average_rating
+    private StaffDAO staffDAO;
 
     public void init() {
         reviewDAO = new ReviewDAO();

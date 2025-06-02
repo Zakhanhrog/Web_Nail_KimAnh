@@ -32,15 +32,15 @@
         <ul class="footer-contact-info list-unstyled">
           <li>
             <i class="fas fa-map-marker-alt footer-icon"></i>
-            <span>123 Đường ABC, Phường XYZ, Quận 1, TP. HCM</span>
+            <span>Số 3 - Đ.Núi Đôi - Tổ 7 - TT.Sóc Sơn</span>
           </li>
           <li>
             <i class="fas fa-phone-alt footer-icon"></i>
-            <span><a href="tel:0909123456">0909 123 456</a></span>
+            <span><a href="tel:0372422193">0372 422 193</a></span>
           </li>
           <li>
             <i class="fas fa-envelope footer-icon"></i>
-            <span><a href="mailto:info@kimibeauty.com">info@kimibeauty.com</a></span>
+            <span><a href="mailto:anguyenthi947@gmail.com">anguyenthi947@gmail.com</a></span>
           </li>
           <li>
             <i class="fas fa-clock footer-icon"></i>
@@ -63,13 +63,11 @@
     </div>
 
     <div class="footer-bottom">
-      <p>© ${java.time.Year.now()} KimiBeauty. All Rights Reserved. Thiết kế bởi <a href="#" target="_blank" style="color: var(--secondary-pink);">Tên Bạn/Công Ty Bạn</a>.</p>
+      <p>© ${java.time.Year.now()} KimiBeauty. All Rights Reserved. Thiết kế bởi <a href="#" target="_blank" style="color: var(--secondary-pink);">devfromzk</a>.</p>
     </div>
   </div>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fas fa-arrow-up"></i></a>
-
-  <%-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --%>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -100,4 +98,7 @@
       }
     });
   </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 </footer>

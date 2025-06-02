@@ -62,16 +62,27 @@ public class BookingServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loggedInUser") == null) {
             System.out.println("BookingServlet doGet: User not logged in. Redirecting to login.");
-            response.sendRedirect(request.getContextPath() + "/login?redirect=" + request.getRequestURI() + (request.getQueryString() != null ? "?" + request.getQueryString() : ""));
-            return;
-        }
-        User loggedInCustomer = (User) session.getAttribute("loggedInUser");
-        if (!"customer".equals(loggedInCustomer.getRole())) {
-            System.out.println("BookingServlet doGet: User is not a customer. Role: " + loggedInCustomer.getRole());
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Chỉ khách hàng mới được đặt lịch.");
+            String targetUrl = request.getRequestURI();
+            if (request.getQueryString() != null) {
+                targetUrl += "?" + request.getQueryString();
+            }
+            response.sendRedirect(request.getContextPath() + "/login?redirect=" + java.net.URLEncoder.encode(targetUrl, "UTF-8"));
             return;
         }
 
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (!"customer".equals(loggedInUser.getRole())) {
+            System.out.println("BookingServlet doGet: User is not a customer. Role: " + loggedInUser.getRole());
+            request.setAttribute("bookingErrorMessage", "Chỉ khách hàng mới được đặt lịch. Tài khoản của bạn có vai trò: " + loggedInUser.getRole());
+            try {
+                loadCommonDataForBookingForm(request);
+            } catch (SQLException e) {
+                System.err.println("BookingServlet doGet: SQLException during loadCommonData on auth error: " + e.getMessage());
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/customer/booking_form.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
 
         String action = request.getPathInfo();
         if (action == null || action.equals("/")) {
@@ -95,11 +106,13 @@ public class BookingServlet extends HttpServlet {
         } catch (SQLException ex) {
             System.err.println("BookingServlet doGet: SQLException: " + ex.getMessage());
             ex.printStackTrace();
-            throw new ServletException("Lỗi cơ sở dữ liệu khi xử lý đặt lịch.", ex);
+            request.setAttribute("bookingErrorMessage", "Lỗi cơ sở dữ liệu: " + ex.getMessage());
+            showBookingFormOnError(request, response);
         } catch (ParseException e) {
             System.err.println("BookingServlet doGet: ParseException: " + e.getMessage());
             e.printStackTrace();
-            throw new ServletException("Lỗi phân tích ngày giờ khi xử lý đặt lịch.", e);
+            request.setAttribute("bookingErrorMessage", "Lỗi định dạng ngày giờ: " + e.getMessage());
+            showBookingFormOnError(request, response);
         }
     }
 
@@ -111,14 +124,17 @@ public class BookingServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loggedInUser") == null) {
-            System.out.println("BookingServlet doPost: User not logged in. Redirecting to login.");
-            response.sendRedirect(request.getContextPath() + "/login");
+            System.out.println("BookingServlet doPost: User not logged in.");
+            request.setAttribute("bookingErrorMessage", "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+            showBookingFormOnError(request, response);
             return;
         }
-        User loggedInCustomer = (User) session.getAttribute("loggedInUser");
-        if (!"customer".equals(loggedInCustomer.getRole())) {
-            System.out.println("BookingServlet doPost: User is not a customer. Role: " + loggedInCustomer.getRole());
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Chỉ khách hàng mới được đặt lịch.");
+
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (!"customer".equals(loggedInUser.getRole())) {
+            System.out.println("BookingServlet doPost: User is not a customer. Role: " + loggedInUser.getRole());
+            request.setAttribute("bookingErrorMessage", "Chỉ khách hàng mới được đặt lịch. Tài khoản của bạn có vai trò: " + loggedInUser.getRole());
+            showBookingFormOnError(request, response);
             return;
         }
 
@@ -131,10 +147,11 @@ public class BookingServlet extends HttpServlet {
         try {
             if ("/submit".equals(action)) {
                 System.out.println("BookingServlet doPost: Processing booking submission...");
-                processBookingSubmission(request, response, loggedInCustomer);
+                processBookingSubmission(request, response, loggedInUser);
             } else {
                 System.out.println("BookingServlet doPost: Invalid action " + action);
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Hành động không hợp lệ.");
+                request.setAttribute("bookingErrorMessage", "Hành động không hợp lệ.");
+                showBookingFormOnError(request, response);
             }
         } catch (SQLException ex) {
             System.err.println("BookingServlet doPost: SQLException: " + ex.getMessage());

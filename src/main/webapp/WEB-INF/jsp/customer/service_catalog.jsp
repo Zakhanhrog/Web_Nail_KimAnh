@@ -10,7 +10,6 @@
     <jsp:include page="_header_customer.jsp" />
 </head>
 <body>
-<%-- Navbar đã được include --%>
 
 <div class="container customer-page-container">
     <h1 class="customer-page-title">Dịch Vụ Của Chúng Tôi</h1>
@@ -72,6 +71,5 @@
 </div>
 
 <jsp:include page="_footer_customer.jsp" />
-<%-- Script Bootstrap đã có trong _footer_customer.jsp hoặc _header_customer.jsp --%>
 </body>
 </html>

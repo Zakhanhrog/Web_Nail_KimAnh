@@ -59,22 +59,14 @@ public class AuthenticationFilter implements Filter {
         // 3. Đã đăng nhập, kiểm tra quyền truy cập các trang admin
         if (path.startsWith("/admin")) {
             if (loggedInUser != null && ("admin".equals(loggedInUser.getRole()) || "staff".equals(loggedInUser.getRole()) || "cashier".equals(loggedInUser.getRole()))) {
-                // Người dùng là admin, staff hoặc cashier, cho phép truy cập trang admin
                 this.context.log("Admin/Staff/Cashier access to admin path, allowing request.");
                 chain.doFilter(request, response);
             } else {
-                // Không có quyền admin/staff/cashier, chuyển hướng hoặc báo lỗi
                 this.context.log("User does not have admin/staff/cashier role, access denied to admin path.");
-                // Có thể chuyển về trang chủ của customer hoặc trang lỗi "Access Denied"
-                // httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Bạn không có quyền truy cập trang này.");
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/"); // Chuyển về trang chủ customer
             }
             return;
         }
-
-        // 4. Các trang khác yêu cầu đăng nhập (ví dụ: trang quản lý lịch hẹn của customer)
-        // Ví dụ: if (path.startsWith("/customer/profile") || path.startsWith("/customer/appointments")) { ... }
-        // Hiện tại, nếu đã đăng nhập và không phải trang admin, cho qua
         this.context.log("Logged in user, allowing access to non-admin protected path.");
         chain.doFilter(request, response);
     }
@@ -92,6 +84,5 @@ public class AuthenticationFilter implements Filter {
     }
 
     public void destroy() {
-        //cleanup operations
     }
 }

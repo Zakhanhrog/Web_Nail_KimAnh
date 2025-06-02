@@ -117,9 +117,6 @@
 </div>
 
 <jsp:include page="_footer_customer.jsp" />
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function() {
         let selectedServices = [];
@@ -266,17 +263,15 @@
                 // Kiểm tra kỹ service.id
                 if (typeof service.id === 'undefined' || service.id === null || isNaN(service.id)) {
                     console.error("ERROR in updateSelectedServicesUI: Service object has invalid id:", JSON.parse(JSON.stringify(service)));
-                    return; // Bỏ qua service này nếu ID không hợp lệ
+                    return;
                 }
                 const serviceNameText = service.name ? service.name : 'Lỗi tên dịch vụ';
-                const currentServiceId = service.id; // Gán vào một biến để đảm bảo
+                const currentServiceId = service.id;
                 console.log("Processing service for UI: ID =", currentServiceId, "Name =", serviceNameText);
 
-                // Thay đổi cách tạo HTML, sử dụng jQuery để tạo và set attribute
-                // Điều này giúp tránh các vấn đề tiềm ẩn với template literals trong một số trường hợp phức tạp
                 const serviceItemDiv = $('<div></div>')
                     .addClass('service-item')
-                    .attr('data-service-id', currentServiceId); // Sử dụng attr()
+                    .attr('data-service-id', currentServiceId);
 
                 const hiddenInput = $('<input>')
                     .attr('type', 'hidden')

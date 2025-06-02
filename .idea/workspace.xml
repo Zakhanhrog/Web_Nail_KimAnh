@@ -18,14 +18,10 @@
       <change afterPath="$PROJECT_DIR$/../Module3/Bai2/EX4_README.MD" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../Module3/Bai2/EX5_README.MD" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../Module3/Bai2/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/BookingSuccessServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/images/customer-avatar-1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/images/customer-avatar-2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/images/customer-avatar-3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/images/logo-brand-1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/images/logo-brand-2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/images/logo-brand-3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/images/logo-brand-4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Test Source/test.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/css/custom-style-dark.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/css/origin.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/js/custom-scripts.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../trangcanhan_thanhbach/.idea/trangcanhan_thanhbach.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../zk_Interview/AI_Interview_Project/.idea/AI_Interview_Project.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../zk_Interview/AI_Interview_Project/backend/.env" afterDir="false" />
@@ -80,11 +76,19 @@
       <change beforePath="$PROJECT_DIR$/../Module2_TEST/src/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/BookingServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/BookingServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/_header_admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/_header_admin.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/admin/dashboard.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/CustomerAppointmentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/CustomerAppointmentServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/ReviewServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/controller/ReviewServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/dao/AppointmentDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/filter/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tiemnail/app/filter/AuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/_footer_customer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/_footer_customer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/_header_customer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/_header_customer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking-success.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking-success.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking_form.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/booking_form.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/css/admin-style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/css/admin-style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/my_appointment_list.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/my_appointment_list.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/my_appointment_view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/my_appointment_view.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/nail_art_catalog.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/nail_art_catalog.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/service_catalog.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/customer/service_catalog.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/css/custom-style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/css/custom-style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../caseStudy_Mod2/.idea/caseStudy_Mod2.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -122,9 +126,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="CSS File" />
         <option value="Jsp File" />
         <option value="Class" />
+        <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -176,6 +181,9 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -296,11 +304,24 @@
       <workItem from="1748533984585" duration="4541000" />
       <workItem from="1748538547198" duration="34415000" />
       <workItem from="1748615711494" duration="786000" />
-      <workItem from="1748616502308" duration="29277000" />
+      <workItem from="1748616502308" duration="31693000" />
+      <workItem from="1748709784266" duration="17783000" />
+      <workItem from="1748789192620" duration="20952000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
